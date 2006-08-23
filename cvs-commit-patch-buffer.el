@@ -1,23 +1,60 @@
-;; Copyright 2003 Jim Radford and David Caldwell
+;; Copyright 2003,2004
+;;   by Jim Radford <radford@bleackbean.org> 
+;;   and David Caldwell <david@porkrind.org>
+;; This code can be distributed under the terms of the GNU Public License
+;; Version: 2.0
+
+(require 'vc)
+(require 'log-edit)
 
 (defun cvs-commit-patch-buffer (buffer directory)
-  "Still need to get the list of modified files and tell them to revert"
+  "Commit the patch found in BUFFER applying it from DIRECTORY."
   (interactive "bBuffer to commit: \nDDirectory: ")
-  (log-edit `(lambda () (interactive)
-			   (let ((file (make-temp-file "commit-buffer" nil))
-					 (comment (buffer-string)) status
-					 (cvs-commit-buffer (window-buffer (display-buffer (get-buffer-create "*cvs-commit-patch*")))))
-				 (with-current-buffer cvs-commit-buffer (erase-buffer))
-				 (unwind-protect
-					 (progn
-					   (with-current-buffer ,buffer
-						 (write-region (point-min) (point-max) file))
-					   (with-current-buffer cvs-commit-buffer
-						 (let ((default-directory ,directory))
-						   (unless (eq (setq status (call-process "commit-patch" nil cvs-commit-buffer 'display "-m" comment file)) 0)
-							   (message "Commit patch failed with a status of '%S'." status))))
-					   (delete-file file)))))
-			nil nil "*cvs-commit*"))
+  (let* ((patch-files (with-temp-buffer
+                        (let ((lsdiff (current-buffer)))
+                          (when (eq 0 (with-current-buffer buffer
+                                        (call-process-region (point-min) (point-max) 
+                                                             "lsdiff" nil lsdiff nil)))
+                            (split-string (buffer-string)))))) 
+         (f patch-files) visiting-buffers)
+    (while (car f)
+      (let ((buf (find-buffer-visiting (car f))))
+        (when buf
+          (with-current-buffer buf (vc-buffer-sync))
+          (add-to-list 'visiting-buffers buf)))
+      (setq f (cdr f)))
+    (log-edit
+     `(lambda () (interactive)
+        (let ((patch (make-temp-file "commit-buffer" nil))
+              (comment (buffer-string))
+              (output-buffer (window-buffer
+                              (display-buffer
+                               (get-buffer-create "*cvs-commit-patch*")))))
+          (unwind-protect 
+              (progn
+                (with-current-buffer ,buffer
+                  (write-region (point-min) (point-max) patch))
+                (with-current-buffer output-buffer
+                  (erase-buffer)
+                  (let* ((default-directory ,directory) 
+                         (status (call-process "cvs-commit-patch" nil
+                                               output-buffer 'display
+                                               "-m" comment patch)))
+                    (if (not (eq status 0))
+                        (message "Commit patch failed with a status of '%S' (%S)." status patch)
+                      (mapc (lambda (buf) (with-current-buffer buf
+                                            (vc-resynch-buffer (buffer-file-name buf) 'revert 'noquery)
+                                            ;; stupid vc-revert-buffer1 doesn't call revert-buffer
+                                            ;; with preserve-modes which means the CVS version doesn't
+                                            ;; get updated, so we do it by hand.
+                                            (run-hooks 'find-file-hooks)))
+                            ',visiting-buffers)
+                      (message "Patched and commited %S file(s) and reverted %S." 
+                               ,(length patch-files) ,(length visiting-buffers))))))
+            (delete-file patch))))
+     nil
+     `(lambda () ',patch-files)
+     "*cvs-commit*")))
 
 (when (require 'diff-mode)
   (setq diff-default-read-only nil)
