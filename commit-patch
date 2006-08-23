@@ -28,13 +28,15 @@ while (!$vc{name}) {
         $vc{commit}       = 'cvs commit';
         $vc{message_opt}  = '-m';
         $vc{add}          = 'cvs add';
-        $vc{remove}       = 'cvs remove';
+        $vc{remove}       = 'cvs rm';
+        $vc{patcharg}     = '-p0';
     } elsif (-d "$repo/_darcs") {
         $vc{name}         = 'darcs';
         $vc{diff}         = 'darcs diff -u';
         $vc{add}          = 'darcs add';
         $vc{remove}       = 'true';
         $vc{commit}       = 'darcs record --all';
+        $vc{patcharg}     = '-p1';
         if ($message) {
             # Darcs doesn't like multiline -m comments so we have to put the log message into a file and use --logfile. Yuck.
             #$vc{message_opt} = '-m';
@@ -53,6 +55,7 @@ while (!$vc{name}) {
         $vc{message_opt}  = '-m';
         $vc{add}          = 'hg addremove';
         $vc{remove}       = 'true';
+        $vc{patcharg}     = '-p1';
     } else {
         $repo.="/..";
         printf("Trying back a dir: $repo, abs:%s\n", abs_path($repo));
@@ -75,13 +78,13 @@ eval {
     my ($out,$err,$non_committed_patch);
     run([split(/ /,$vc{add}),    @files],                                               '>', \$out, '2>', \$err);# Expect these 2 to fail when
     run([split(/ /,$vc{remove}), @files],                                               '>', \$out, '2>', \$err);# there are no new files.
-    run([split(/ /,$vc{diff}),   @files], '>', "working.patch.$$",                                  '2>', \$err) or die "$err\n";
-    run(["interdiff", "-p1", $patch, "working.patch.$$"], '>', "non_committed.patch.$$",            '2>', \$err) or die "$err\n";
-    run([qw(patch -p1 -R)], '<', "working.patch.$$",                                    '>', \$out, '2>', \$err) or die "$out\n$err\n";
-    run([qw(patch -p1)], '<', $patch,                                                   '>', \$out, '2>', \$err) or die "$out\n$err\n";
+    run([split(/ /,$vc{diff}),   @files], '>', "working.patch.$$",                                  '2>', \$err);# CVS diff dies. Sigh. or die "$err\n";
+    run(["interdiff", $vc{patcharg}, $patch, "working.patch.$$"], '>', "non_committed.patch.$$",    '2>', \$err) or die "$err\n";
+    run(["patch", $vc{patcharg}, "-R"], '<', "working.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
+    run(["patch", $vc{patcharg}], '<', $patch,                                          '>', \$out, '2>', \$err) or die "$out\n$err\n";
     # Don't capture stdout or stderr because it can be interactive (cough cough darcs)
     run([split(/ /,$vc{commit}), $message && $vc{message_opt} ? ($vc{message_opt}, $message) : (), @files],debug => 0) or die "commit failed.\n";
-    run([qw(patch -p1)], '<', "non_committed.patch.$$",                                 '>', \$out, '2>', \$err) or die "$out\n$err\n";
+    run(["patch", $vc{patcharg}], '<', "non_committed.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
 };
 sub clean() {
     foreach my $k (keys %clean) { rename $k,$clean{$k} if $clean{$k} }
