@@ -18,9 +18,20 @@ PREREQUISITES
 	   other environments, most notably Windows. Use at your own risk.
 
 INSTRUCTIONS
-       See the man page or perldoc:
+       commit-patch: See the man page or perldoc:
          man ./commit-patch.1
          perldoc commit-patch
+
+       commit-patch-buffer.el is an emacs interface to
+       commit-patch. It allows you to just hit C-c C-c in any patch
+       buffer to apply and commit only the changes indicated by the
+       patch, regardless of the changes in your working directory.
+
+       One method of working with commit-patch-buffer is to just M-x
+       vc-diff a file then kill, split or edit the resulting hunks and
+       to then hit C-c C-c to commit the patch. The other is to use
+       PCL cvs mode to tag many files and then to diff them into a
+       buffer which can again be edited and committed.
 
 HOMEPAGE
        <http://www.porkrind.org/commit-patch>
