@@ -22,7 +22,7 @@ my %clean;
 my $repo=".";
 my %vc;
 while (!$vc{name}) {
-    if (-d "$repo/cvs" && $repo eq '.') {
+    if (-d "$repo/CVS" && $repo eq '.') {
         $vc{name}         = 'cvs';
         $vc{diff}         = 'cvs diff -u';
         $vc{commit}       = 'cvs commit';
