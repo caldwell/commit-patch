@@ -2,20 +2,20 @@ commit-patch - commit patches to CVS, Darcs or Mercurial repositories
 ------------------------------------------------------------------------------
 
 PREREQUISITES
-	   commit-patch relies on several programs to get the job done:
+       commit-patch relies on several programs to get the job done:
 
           perl      - <http://www.perl.org>
-	      patch     - <http://www.gnu.org/software/patch/>
-	      interdiff - <http://cyberelk.net/tim/data/patchutils/>
-	      cp        - Ideally installed on your system already. :-)
-	   and, of course, one of:
-	      darcs     - <http://abridgegame.org/darcs/>
-	      mercurial - <http://www.selenic.com/mercurial/>
-	      cvs       - <http://www.nongnu.org/cvs/>
+          patch     - <http://www.gnu.org/software/patch/>
+          interdiff - <http://cyberelk.net/tim/data/patchutils/>
+          cp        - Ideally installed on your system already. :-)
+       and, of course, one of:
+          darcs     - <http://abridgegame.org/darcs/>
+          mercurial - <http://www.selenic.com/mercurial/>
+          cvs       - <http://www.nongnu.org/cvs/>
 
-	   commit-patch is known to run on Linux and Mac OS X. It is perl,
-	   so ideally it will run anywhere, but we have never tested in
-	   other environments, most notably Windows. Use at your own risk.
+       commit-patch is known to run on Linux and Mac OS X. It is perl,
+       so ideally it will run anywhere, but we have never tested in
+       other environments, most notably Windows. Use at your own risk.
 
 INSTRUCTIONS
        commit-patch: See the man page or perldoc:
