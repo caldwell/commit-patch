@@ -1,13 +1,12 @@
-;; Copyright 2003,2004
-;;   by Jim Radford <radford@bleackbean.org> 
-;;   and David Caldwell <david@porkrind.org>
+;; Copyright 2003-2006 Jim Radford <radford@bleackbean.org> 
+;;                 and David Caldwell <david@porkrind.org>, All Rights Reserved.
 ;; This code can be distributed under the terms of the GNU Public License
-;; Version: 2.0
+;; Version: 2.1
 
 (require 'vc)
 (require 'log-edit)
 
-(defun cvs-commit-patch-buffer (buffer directory)
+(defun commit-patch-buffer (buffer directory)
   "Commit the patch found in BUFFER applying it from DIRECTORY."
   (interactive "bBuffer to commit: \nDDirectory: ")
   (let* ((patch-files (with-temp-buffer
@@ -29,7 +28,7 @@
               (comment (buffer-string))
               (output-buffer (window-buffer
                               (display-buffer
-                               (get-buffer-create "*cvs-commit-patch*")))))
+                               (get-buffer-create "*commit-patch*")))))
           (unwind-protect 
               (progn
                 (with-current-buffer ,buffer
@@ -37,7 +36,7 @@
                 (with-current-buffer output-buffer
                   (erase-buffer)
                   (let* ((default-directory ,directory) 
-                         (status (call-process "cvs-commit-patch" nil
+                         (status (call-process "commit-patch" nil
                                                output-buffer 'display
                                                "-m" comment patch)))
                     (if (not (eq status 0))
@@ -54,10 +53,10 @@
             (delete-file patch))))
      nil
      `(lambda () ',patch-files)
-     "*cvs-commit*")))
+     "*commit*")))
 
 (when (require 'diff-mode)
   (setq diff-default-read-only nil)
-  (define-key diff-mode-map "\C-c\C-c" 'cvs-commit-patch-buffer))
+  (define-key diff-mode-map "\C-c\C-c" 'commit-patch-buffer))
 
-(provide 'cvs-commit-patch-buffer)
+(provide 'commit-patch-buffer)
