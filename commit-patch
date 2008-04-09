@@ -29,6 +29,7 @@ while (!$vc{name}) {
         $vc{add}          = 'cvs add';
         $vc{remove}       = 'cvs rm';
         $vc{patcharg}     = '-p0';
+        $vc{lsdiffarg}    = [];
     } elsif (-d "$repo/_darcs") {
         $vc{name}         = 'darcs';
         $vc{diff}         = 'darcs diff -u';
@@ -36,6 +37,7 @@ while (!$vc{name}) {
         $vc{remove}       = 'true';
         $vc{commit}       = 'darcs record --all';
         $vc{patcharg}     = '-p1';
+        $vc{lsdiffarg}    = [qw(--strip 1)];
         if ($message) {
             # Darcs doesn't like multiline -m comments so we have to put the log message into a file and use --logfile. Yuck.
             #$vc{message_opt} = '-m';
@@ -55,6 +57,7 @@ while (!$vc{name}) {
         $vc{add}          = 'hg addremove';
         $vc{remove}       = 'true';
         $vc{patcharg}     = '-p1';
+        $vc{lsdiffarg}    = [qw(--strip 1)];
     } else {
         $repo.="/..";
         printf("Trying back a dir: $repo, abs:%s\n", abs_path($repo));
@@ -63,7 +66,7 @@ while (!$vc{name}) {
 }
 
 my ($lsdiff_out, $err);
-run ["lsdiff", "--strip", "1", $patch], '|', ["sort"], '|', ["uniq"], \$lsdiff_out, \$err or die "lsdiff|sort|unique : $! ($err)";
+run ["lsdiff", @{$vc{lsdiffarg}}, $patch], '|', ["sort"], '|', ["uniq"], \$lsdiff_out, \$err or die "lsdiff|sort|unique : $! ($err)";
 my @files = split(/\n/, $lsdiff_out);
 die "No files in patch" unless scalar @files;
 
