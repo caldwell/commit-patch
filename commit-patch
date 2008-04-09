@@ -75,7 +75,7 @@ die "No files in patch" unless scalar @files;
 
 eval {
     for my $f (@files) {
-        run ["cp", "-f", $f, "$f.orig.$$"] or die "couldn't make backup of $f: $!";
+        run ["cp", "-f", $f, "$f.orig.$$"] or die "couldn't make backup of $f: $!" if -f $f;
         $clean{"$f.orig.$$"} = $f;
     }
     $SIG{PIPE} = $SIG{INT} = $SIG{QUIT} = sub { clean(); print "Cleanly aborted\n"; };
