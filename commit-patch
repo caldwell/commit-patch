@@ -17,11 +17,6 @@ my $patch = shift;
 die "bad patch file: $!" if -z $patch;
 die "Invalid message" if defined $message && $message eq "";
 
-my ($lsdiff_out, $err);
-run ["lsdiff", "--strip", "1", $patch], '|', ["sort"], '|', ["uniq"], \$lsdiff_out, \$err or die "lsdiff|sort|unique : $! ($err)";
-my @files = split(/\n/, $lsdiff_out);
-die "No files in patch" unless scalar @files;
-
 my %clean;
 my $repo=".";
 my %vc;
@@ -66,6 +61,11 @@ while (!$vc{name}) {
         die "couldn't find repo" if abs_path($repo) eq "/";
     }
 }
+
+my ($lsdiff_out, $err);
+run ["lsdiff", "--strip", "1", $patch], '|', ["sort"], '|', ["uniq"], \$lsdiff_out, \$err or die "lsdiff|sort|unique : $! ($err)";
+my @files = split(/\n/, $lsdiff_out);
+die "No files in patch" unless scalar @files;
 
 #print "Found $vc{name} in $repo\n";
 #printf("files: %s\n", join(",", @files));
