@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# Copyright (c) 2003-2006 David Caldwell <david@porkrind.org>
+# Copyright (c) 2003-2008 David Caldwell <david@porkrind.org>
 #                     and Jim Radford <radford@bleackbean.org>, All Rights Reserved.
 # This code can be distributed under the terms of the GNU Public License
 # Version: 2.0
@@ -199,7 +199,7 @@ Jim Radford <radford@blackbean.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2003-2006 by David Caldwell and Jim Radford.
+Copyright 2003-2008 by David Caldwell and Jim Radford.
 
 B<commit-patch> is distributed under the GNU General Public
 License. See the COPYING file in the distribution for more details.
