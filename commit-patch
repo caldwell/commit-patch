@@ -10,8 +10,10 @@ use IPC::Run qw(run);
 use File::Temp qw(tempfile);
 use Getopt::Long;
 
-my $message;
-GetOptions("message|m=s" => \$message) and scalar @ARGV == 1 or die "Usage: $0 [--message|-m <message>] <patch-file>\n";
+my ($message, $message_filename);
+GetOptions("message|m=s" => \$message,
+           "F|message-file=s" => \$message_filename,
+    ) and scalar @ARGV == 1 or die "Usage: $0 [--message|-m <message>] [--message-file|-F <message-filename>] <patch-file>\n";
 my $patch = shift;
 
 die "bad patch file: $!" if -z $patch;
@@ -25,7 +27,8 @@ while (!$vc{name}) {
         $vc{name}         = 'cvs';
         $vc{diff}         = 'cvs diff -u';
         $vc{commit}       = 'cvs commit';
-        $vc{message_opt}  = '-m';
+        $vc{message_opt}  = $message          ? ['-m', $message] :
+                            $message_filename ? ['-F', $message_filename] : [];
         $vc{add}          = 'cvs add';
         $vc{remove}       = 'cvs rm';
         $vc{patcharg}     = '-p0';
@@ -42,18 +45,18 @@ while (!$vc{name}) {
             # Darcs doesn't like multiline -m comments so we have to put the log message into a file and use --logfile. Yuck.
             #$vc{message_opt} = '-m';
             $message .= "\n" unless $message =~ /\n$/s; # Darcs does screwey stuff when logfile has no trailing \n.
-            my ($message_file, $message_filename) = tempfile("commit-patch-message-XXXXXXXX", UNLINK=>0);
+            (my $message_file, $message_filename) = tempfile("commit-patch-message-XXXXXXXX", UNLINK=>0);
             print $message_file $message;
             close $message_file;
             $clean{$message_filename} = undef; # make sure we delete this file on exit.
-            $vc{commit}  .= ' --logfile='.$message_filename;
-        } else {
         }
+        $vc{message_opt}  = $message_filename ? ["--logfile=$message_filename"] : [];
     } elsif (-d "$repo/.hg") {
         $vc{name}         = 'hg';
         $vc{diff}         = 'hg diff';
         $vc{commit}       = 'hg commit';
-        $vc{message_opt}  = '-m';
+        $vc{message_opt}  = $message          ? ['-m', $message] :
+                            $message_filename ? ['--logfile', $message_filename] : [];
         $vc{add}          = 'hg addremove';
         $vc{remove}       = 'true';
         $vc{patcharg}     = '-p1';
@@ -90,7 +93,7 @@ eval {
     run(["patch", $vc{patcharg}, "-R"], '<', "working.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
     run(["patch", $vc{patcharg}], '<', $patch,                                          '>', \$out, '2>', \$err) or die "$out\n$err\n";
     # Don't capture stdout or stderr because it can be interactive (cough cough darcs)
-    run([split(/ /,$vc{commit}), $message && $vc{message_opt} ? ($vc{message_opt}, $message) : (), @files],debug => 0) or die "commit failed.\n";
+    run([split(/ /,$vc{commit}), @{$vc{message_opt}},                                        @files],debug => 0) or die "commit failed.\n";
     run(["patch", $vc{patcharg}], '<', "non_committed.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
 };
 sub clean() {
