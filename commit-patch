@@ -112,7 +112,7 @@ commit-patch - commit patches to I<CVS>, I<Darcs> or I<Mercurial> repositories
 
 =head1 SYNOPSIS
 
-commit-patch [B<-m> I<message>] I<patch-file>
+commit-patch [B<-m> I<message>] [B<-F> I<message-file>] I<patch-file>
 
 =head1 DESCRIPTION
 
@@ -136,6 +136,10 @@ you didn't specify a message name on the command line. That is,
 B<commit-patch> does not interfere with the patch naming process of
 the underlying version control system; I<Darcs> will still ask you
 interactively and I<CVS> will still launch your editor.
+
+B<-F>, B<--message-file>=I<filename> - You can optionally get the
+commit message from a file. This is generally only useful for
+scripting B<commit-patch>.
 
 =head1 DIAGNOSTICS
 
