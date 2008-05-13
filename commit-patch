@@ -6,15 +6,29 @@
 
 use strict;
 use Cwd qw(abs_path);
-use IPC::Run qw(run);
+use IPC::Run;
 use File::Temp qw(tempfile);
 use Getopt::Long;
 use Pod::Usage;
+
+my ($verbose);
+sub run {
+    if ($verbose) {
+        for (@_) {
+            print join ' ', @$_ if ref $_ eq 'ARRAY';
+            print " $_ " if ref $_ eq '';
+            print '[',ref $_,'] ' if ref $_ ne 'ARRAY' && ref $_ ne '';
+        }
+        print "\n";
+    }
+    IPC::Run::run(@_);
+}
 
 my ($message, $message_filename);
 GetOptions("message|m=s" => \$message,
            "F|message-file=s" => \$message_filename,
            "h|help" => sub { pod2usage(1) },
+           "v|verbose"        => \$verbose,
     ) and scalar @ARGV == 1 or pod2usage(2);
 my $patch = shift;
 
@@ -114,7 +128,7 @@ commit-patch - commit patches to I<CVS>, I<Darcs> or I<Mercurial> repositories
 
 =head1 SYNOPSIS
 
-commit-patch [B<-m> I<message>] [B<-F> I<message-file>] I<patch-file>
+commit-patch [B<-m> I<message>] [B<-F> I<message-file>] [B<-v>] I<patch-file>
 
 =head1 DESCRIPTION
 
@@ -142,6 +156,9 @@ interactively and I<CVS> will still launch your editor.
 B<-F>, B<--message-file>=I<filename> - You can optionally get the
 commit message from a file. This is generally only useful for
 scripting B<commit-patch>.
+
+B<-v>, B<--verbose> - Turn on debugging. This will print the commands
+that B<commit-patch> is running to get the patch committed.
 
 =head1 DIAGNOSTICS
 
