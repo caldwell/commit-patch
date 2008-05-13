@@ -11,9 +11,9 @@ use File::Temp qw(tempfile);
 use Getopt::Long;
 use Pod::Usage;
 
-my ($verbose);
+my ($dry_run, $verbose);
 sub run {
-    if ($verbose) {
+    if ($verbose || $dry_run) {
         for (@_) {
             print join ' ', @$_ if ref $_ eq 'ARRAY';
             print " $_ " if ref $_ eq '';
@@ -21,6 +21,7 @@ sub run {
         }
         print "\n";
     }
+    return 1 if $dry_run;
     IPC::Run::run(@_);
 }
 
@@ -28,6 +29,7 @@ my ($message, $message_filename);
 GetOptions("message|m=s" => \$message,
            "F|message-file=s" => \$message_filename,
            "h|help" => sub { pod2usage(1) },
+           "n|dry-run"        => \$dry_run,
            "v|verbose"        => \$verbose,
     ) and scalar @ARGV == 1 or pod2usage(2);
 my $patch = shift;
@@ -113,6 +115,7 @@ eval {
     run(["patch", $vc{patcharg}], '<', "non_committed.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
 };
 sub clean() {
+    return if $dry_run;
     foreach my $k (keys %clean) { rename $k,$clean{$k} if $clean{$k} }
 }
 if ($@) {
@@ -128,7 +131,7 @@ commit-patch - commit patches to I<CVS>, I<Darcs> or I<Mercurial> repositories
 
 =head1 SYNOPSIS
 
-commit-patch [B<-m> I<message>] [B<-F> I<message-file>] [B<-v>] I<patch-file>
+commit-patch [B<-m> I<message>] [B<-F> I<message-file>] [B<-v>] [B<-n>] I<patch-file>
 
 =head1 DESCRIPTION
 
@@ -159,6 +162,10 @@ scripting B<commit-patch>.
 
 B<-v>, B<--verbose> - Turn on debugging. This will print the commands
 that B<commit-patch> is running to get the patch committed.
+
+B<-n>, B<--dry-run> - Turn on more paranoid debugging. This will print
+the commands that B<commit-patch> will run to get the patch committed
+but it wont actually run those commands.
 
 =head1 DIAGNOSTICS
 
