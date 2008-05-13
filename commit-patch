@@ -9,11 +9,13 @@ use Cwd qw(abs_path);
 use IPC::Run qw(run);
 use File::Temp qw(tempfile);
 use Getopt::Long;
+use Pod::Usage;
 
 my ($message, $message_filename);
 GetOptions("message|m=s" => \$message,
            "F|message-file=s" => \$message_filename,
-    ) and scalar @ARGV == 1 or die "Usage: $0 [--message|-m <message>] [--message-file|-F <message-filename>] <patch-file>\n";
+           "h|help" => sub { pod2usage(1) },
+    ) and scalar @ARGV == 1 or pod2usage(2);
 my $patch = shift;
 
 die "bad patch file: $!" if -z $patch;
