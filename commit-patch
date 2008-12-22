@@ -25,18 +25,6 @@ sub run {
     IPC::Run::run(@_);
 }
 
-my ($message, $message_filename);
-GetOptions("m|message=s"      => \$message,
-           "F|message-file=s" => \$message_filename,
-           "h|help" => sub { pod2usage(1) },
-           "n|dry-run"        => \$dry_run,
-           "v|verbose"        => \$verbose,
-    ) and scalar @ARGV == 1 or pod2usage(2);
-my $patch = shift;
-
-die "bad patch file: $!" if -z $patch;
-die "Invalid message" if defined $message && $message eq "";
-
 my %clean;
 my $repo=".";
 my %vc;
@@ -87,6 +75,18 @@ while (!$vc{name}) {
         die "couldn't find repo" if abs_path($repo) eq "/";
     }
 }
+
+my ($message, $message_filename);
+GetOptions("m|message=s"      => \$message,
+           "F|message-file=s" => \$message_filename,
+           "h|help" => sub { pod2usage(1) },
+           "n|dry-run"        => \$dry_run,
+           "v|verbose"        => \$verbose,
+    ) and scalar @ARGV == 1 or pod2usage(2);
+my $patch = shift;
+
+die "bad patch file: $!" if -z $patch;
+die "Invalid message" if defined $message && $message eq "";
 
 my ($lsdiff_out, $err);
 run ["lsdiff", @{$vc{lsdiffarg}}, $patch], '|', ["sort"], '|', ["uniq"], \$lsdiff_out, \$err or die "lsdiff|sort|unique : $! ($err)";
