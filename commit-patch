@@ -69,6 +69,11 @@ while (!$vc{name}) {
         $vc{remove}       = 'true';
         $vc{patcharg}     = '-p1';
         $vc{lsdiffarg}    = [qw(--strip 1)];
+    } elsif (-d "$repo/.git") {
+        $vc{name}         = 'git';
+        $vc{message}      = sub { ('-m', $_[0]) };
+        $vc{message_file} = sub { ('-F', $_[0]) };
+        # Git is special cased below.
     } else {
         $repo.="/..";
         printf("Trying back a dir: $repo, abs:%s\n", abs_path($repo));
@@ -87,6 +92,17 @@ my $patch = shift;
 
 die "bad patch file: $!" if -z $patch;
 die "Invalid message" if defined $message && $message eq "";
+
+my @message_opt = $message          ? $vc{message}->($message) :
+                  $message_filename ? $vc{message_file}->($message_filename) : ();
+
+# Git pretty much supports what commit-patch does already, so we special case it here.
+if ($vc{name} eq 'git') {
+    run([qw(git diff --cached --quiet)]) or die "The index is not empty. Cowardly refusing to do anything potentially harmful.\n";
+    run([qw(git apply --cached), $patch]) or die "Git failed.\n";
+    run([qw(git commit), @message_opt]) or die "Git failed.\n";
+    exit;
+}
 
 my ($lsdiff_out, $err);
 run ["lsdiff", @{$vc{lsdiffarg}}, $patch], '|', ["sort"], '|', ["uniq"], \$lsdiff_out, \$err or die "lsdiff|sort|unique : $! ($err)";
@@ -113,8 +129,6 @@ eval {
     run(["patch", $vc{patcharg}, "-R"], '<', "working.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
     run(["patch", $vc{patcharg}], '<', $patch,                                          '>', \$out, '2>', \$err) or die "$out\n$err\n";
     # Don't capture stdout or stderr because it can be interactive (cough cough darcs)
-    my @message_opt = $message          ? $vc{message}->($message) :
-                      $message_filename ? $vc{message_file}->($message_filename) : ();
     run([split(/ /,$vc{commit}), @message_opt,                                               @files],debug => 0) or die "commit failed.\n";
     run(["patch", $vc{patcharg}], '<', "non_committed.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
 };
