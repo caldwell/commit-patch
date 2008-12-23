@@ -25,7 +25,7 @@ sub run {
     IPC::Run::run(@_);
 }
 
-my %clean;
+my %clean; # Rename keys to values on any error (rollback). Unlinks keys on success.
 my $repo=".";
 my %vc;
 while (!$vc{name}) {
