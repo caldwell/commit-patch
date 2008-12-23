@@ -9,7 +9,7 @@ PREREQUISITES
           interdiff - <http://cyberelk.net/tim/data/patchutils/>
           cp        - Ideally installed on your system already. :-)
        and, of course, one of:
-          darcs     - <http://abridgegame.org/darcs/>
+          darcs     - <http://darcs.net/>
           mercurial - <http://www.selenic.com/mercurial/>
           cvs       - <http://www.nongnu.org/cvs/>
 
