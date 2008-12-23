@@ -1,10 +1,13 @@
 VERSION=2.0
 
-all: executable commit-patch.1
+all: executable commit-partial commit-patch.1
 
 # Darcs loses the x bit. :-(
 executable:
 	chmod +x commit-patch
+
+commit-partial:
+	ln -s commit-patch commit-partial
 
 commit-patch.1: commit-patch
 	pod2man -c "User Commands" $< > $@
@@ -14,7 +17,7 @@ commit-patch.html: commit-patch
 
 release: commit-patch-$(VERSION)
 
-commit-patch-$(VERSION): commit-patch commit-patch-buffer.el commit-patch.1 Makefile README COPYING
+commit-patch-$(VERSION): commit-patch commit-partial commit-patch-buffer.el commit-patch.1 Makefile README COPYING
 	mkdir commit-patch-$(VERSION)
 	cp -p $^ commit-patch-$(VERSION)
 	tar czf commit-patch-$(VERSION).tar.gz commit-patch-$(VERSION)

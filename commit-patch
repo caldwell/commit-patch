@@ -81,14 +81,52 @@ while (!$vc{name}) {
     }
 }
 
+my $commit_partial = $0 =~ /commit-partial/;
+my $commit_patch  = !$commit_partial;
+
 my ($message, $message_filename);
-GetOptions("m|message=s"      => \$message,
-           "F|message-file=s" => \$message_filename,
-           "h|help" => sub { pod2usage(1) },
+GetOptions("h|help" => sub { pod2usage(1) },
            "n|dry-run"        => \$dry_run,
            "v|verbose"        => \$verbose,
-    ) and scalar @ARGV == 1 or pod2usage(2);
-my $patch = shift;
+           $commit_patch ?
+             ("m|message=s"      => \$message,
+              "F|message-file=s" => \$message_filename)
+             : # commit-partial
+             (),
+    ) and (scalar @ARGV == 1 || $commit_partial) or pod2usage(2);
+my $patch;
+$patch = shift if $commit_patch;
+
+# commit-partial creates a patch file for them and launches their editor.
+if ($commit_partial) {
+    $patch = "commit.$$.patch";
+    $clean{$patch} = undef;
+
+    open PATCH, '>', $patch or die "$patch: $!\n";
+    print PATCH "\n",
+                "# Enter your commit comment above and edit your patch below.\n",
+                "# (Lines starting with # will be stripped and leading and trailing whitespace removed).\n",
+                "# An empty comment will cancel the operation.\n",
+                "==END_COMMENT==\n";
+    close PATCH;
+
+    run([split(/ /,$vc{diff}), @ARGV], '>>', $patch);
+    system($ENV{VISUAL} || $ENV{EDITOR} || 'vi', $patch);
+
+    $message = '';
+    open PATCH, '<', $patch or die "couldn't read $patch: $!\n";
+    while (<PATCH>) {
+        next if /^\#/;
+        goto finished if /^==END_COMMENT==$/;
+        $message .= $_;
+    }
+    die "Couldn't find comment terminator (==END_COMMENT==)\n";
+  finished:
+    $message =~ s/^\s*//;
+    $message =~ s/\s*$//;
+
+    die "No commit message, so I'm not going to do anything.\n" if $message eq '';
+}
 
 die "bad patch file: $!" if -z $patch;
 die "Invalid message" if defined $message && $message eq "";
