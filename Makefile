@@ -1,4 +1,4 @@
-VERSION=2.0
+VERSION=2.1
 
 all: executable commit-partial commit-patch.1 commit-patch.html
 
