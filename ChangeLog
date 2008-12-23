@@ -1,0 +1,22 @@
+2008-12-22  David Caldwell <david@porkrind.org>
+
+	* Released 2.1
+
+	* commit-patch: Added Git support.
+
+	* commit-patch: Added "commit-partial".
+	(inspired by Pistos <pistos@gmail.com>)
+
+2008-05-09  David Caldwell <david@porkrind.org>
+
+	* commit-patch: Added --verbose and --dry-run options.
+
+	* commit-patch: Added --message-file option.
+	(inspired by Pistos <pistos@gmail.com>)
+
+	* commit-patch: Fix lsdiff on CVS sub directories.
+	(thanks: Pistos <pistos@gmail.com>)
+
+2006-08-23  David Caldwell <david@porkrind.org>
+
+	* Release 2.0 (rewritten perl version of cvs-commit-patch)
