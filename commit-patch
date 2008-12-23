@@ -145,11 +145,11 @@ foreach my $k (keys %clean) { unlink $k }
 
 =head1 NAME
 
-commit-patch - commit patches to I<CVS>, I<Darcs> or I<Mercurial> repositories
+commit-patch - commit patches to I<Darcs>, I<Git>, I<CVS>, or I<Mercurial> repositories
 
 =head1 SYNOPSIS
 
-commit-patch [B<-m> I<message>] [B<-F> I<message-file>] [B<-v>] [B<-n>] I<patch-file>
+commit-patch [B<-m> I<message>] [B<-F> I<message-file>] [B<-v>] [B<-n>] [I<patch-file>]
 
 =head1 DESCRIPTION
 
@@ -160,12 +160,12 @@ supply a patch to be committed rather than using the files in the
 current working directory.
 
 B<commit-patch> currently supports the following version control systems:
-B<I<CVS>>, B<I<Darcs>>, and B<I<Mercurial>>.
+B<I<Darcs>>, B<I<Git>>, B<I<CVS>>, and B<I<Mercurial>>.
 
 =head1 OPTIONS
 
 B<-m>, B<--message>=I<message> - An optional I<message> to use as the commit
-text. If the message is multiple lines then I<Mercurial> and I<Darcs>
+text. If the message is multiple lines then I<Darcs>, I<Git>, and I<Mercurial>
 will use the first line as the patch name and the rest as commit
 details. If the C<-m> option is not specified then the result will be
 the same as whatever the underlying version control system would do if
@@ -206,7 +206,7 @@ place as the current directory. That is, the following will not work:
 You B<must> run B<commit-patch> from the same directory that the
 original patch was based from.
 
-I<Darcs> and I<Mercurial> put C<a/> and C<b/> in front of all the paths
+I<Darcs>, I<Git> and I<Mercurial> put C<a/> and C<b/> in front of all the paths
 in the diff output. Don't worry about this; B<commit-patch> takes it into
 account.
 
