@@ -5,6 +5,7 @@ PREREQUISITES
        commit-patch relies on several programs to get the job done:
 
           perl      - <http://www.perl.org>
+          IPC::Run  - <http://search.cpan.org/dist/IPC-Run/>
           patch     - <http://www.gnu.org/software/patch/>
           interdiff - <http://cyberelk.net/tim/data/patchutils/>
           cp        - Ideally installed on your system already. :-)
