@@ -1,4 +1,4 @@
-commit-patch - commit patches to CVS, Darcs or Mercurial repositories
+commit-patch - commit patches to Darcs, Git, CVS or Mercurial repositories
 ------------------------------------------------------------------------------
 
 PREREQUISITES
@@ -11,6 +11,7 @@ PREREQUISITES
           cp        - Ideally installed on your system already. :-)
        and, of course, one of:
           darcs     - <http://darcs.net/>
+          git       - <http://git.or.cz/>
           mercurial - <http://www.selenic.com/mercurial/>
           cvs       - <http://www.nongnu.org/cvs/>
 
