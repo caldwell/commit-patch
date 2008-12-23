@@ -17,7 +17,7 @@ commit-patch.html: commit-patch
 
 release: commit-patch-$(VERSION)
 
-commit-patch-$(VERSION): commit-patch commit-partial commit-patch-buffer.el commit-patch.1 commit-patch.html Makefile README COPYING
+commit-patch-$(VERSION): commit-patch commit-partial commit-patch-buffer.el commit-patch.1 commit-patch.html Makefile README COPYING ChangeLog
 	mkdir commit-patch-$(VERSION)
 	cp -p $^ commit-patch-$(VERSION)
 	tar czf commit-patch-$(VERSION).tar.gz commit-patch-$(VERSION)
