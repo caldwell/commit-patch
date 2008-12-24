@@ -187,7 +187,7 @@ commit-patch - commit patches to I<Darcs>, I<Git>, I<CVS>, or I<Mercurial> repos
 
 =head1 SYNOPSIS
 
-commit-patch [B<-m> I<message>] [B<-F> I<message-file>] [B<-v>] [B<-n>] [I<patch-file>]
+commit-patch [B<-m> I<message>] [B<-F> I<message-file>] [B<-v>] [B<-n>] I<patch-file>
 
 commit-partial [B<-v>] [B<-n>] [I<file> ...]
 
