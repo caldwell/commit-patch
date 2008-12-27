@@ -16,7 +16,7 @@ commit-partial.1:
 	ln -s commit-patch.1 commit-partial.1
 
 commit-patch.html: commit-patch
-	pod2html $< > $@
+	pod2html --title="commit-patch Documentation" $< > $@
 
 release: commit-patch-$(VERSION)
 
