@@ -71,6 +71,7 @@ while (!$vc{name}) {
         $vc{lsdiffarg}    = [qw(--strip 1)];
     } elsif (-d "$repo/.git") {
         $vc{name}         = 'git';
+        $vc{diff}         = 'git diff';
         $vc{message}      = sub { ('-m', $_[0]) };
         $vc{message_file} = sub { ('-F', $_[0]) };
         # Git is special cased below.
