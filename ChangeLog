@@ -2,6 +2,10 @@
 
 	* commit-patch: Added SVN support
 
+2009-01-09  David Caldwell <david@porkrind.org>
+
+	* commit-patch: Made commit-partial work with git.
+
 2008-12-22  David Caldwell <david@porkrind.org>
 
 	* Released 2.1
