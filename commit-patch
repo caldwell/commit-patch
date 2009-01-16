@@ -39,6 +39,16 @@ while (!$vc{name}) {
         $vc{remove}       = 'cvs rm';
         $vc{patcharg}     = '-p0';
         $vc{lsdiffarg}    = [];
+    } elsif (-d "$repo/.svn" && $repo eq '.') {
+        $vc{name}         = 'svn';
+        $vc{diff}         = 'svn diff -x -u';
+        $vc{commit}       = 'svn commit';
+        $vc{message}      = sub { ('-m', $_[0]) };
+        $vc{message_file} = sub { ('-F', $_[0]) };
+        $vc{add}          = 'svn add';
+        $vc{remove}       = 'svn delete';
+        $vc{patcharg}     = '-p0';
+        $vc{lsdiffarg}    = [];
     } elsif (-d "$repo/_darcs") {
         $vc{name}         = 'darcs';
         $vc{diff}         = 'darcs diff -u';
@@ -184,7 +194,7 @@ foreach my $k (keys %clean) { unlink $k }
 
 =head1 NAME
 
-commit-patch - commit patches to I<Darcs>, I<Git>, I<CVS>, or I<Mercurial> repositories
+commit-patch - commit patches to I<Darcs>, I<Git>, I<CVS>, I<SVN>, or I<Mercurial> repositories
 
 =head1 SYNOPSIS
 
@@ -209,7 +219,7 @@ B<vi>. Any files you specify will be passed to your version control's
 diff command.
 
 B<commit-patch> currently supports the following version control systems:
-B<I<Darcs>>, B<I<Git>>, B<I<CVS>>, and B<I<Mercurial>>.
+B<I<Darcs>>, B<I<Git>>, B<I<CVS>>, B<I<SVN>>, and B<I<Mercurial>>.
 
 =head1 OPTIONS
 
@@ -221,7 +231,7 @@ the same as whatever the underlying version control system would do if
 you didn't specify a message name on the command line. That is,
 B<commit-patch> does not interfere with the patch naming process of
 the underlying version control system; I<Darcs> will still ask you
-interactively and I<CVS> will still launch your editor.
+interactively; I<CVS> and I<SVN> will still launch your editor.
 
 B<-F>, B<--message-file>=I<filename> - You can optionally get the
 commit message from a file. This is generally only useful for
