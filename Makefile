@@ -1,4 +1,4 @@
-VERSION=2.2
+VERSION := $(shell perl -ne 's/^\# Version: // and print' commit-patch)
 
 all: executable commit-partial commit-patch.1 commit-partial.1 commit-patch.html
 
