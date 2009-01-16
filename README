@@ -1,5 +1,5 @@
-commit-patch - commit patches to Darcs, Git, CVS, SVN, or Mercurial repositories
---------------------------------------------------------------------------------
+commit-patch - commit patches to Darcs, Git, CVS, Subversion, or Mercurial
+--------------------------------------------------------------------------
 
 PREREQUISITES
        commit-patch relies on several programs to get the job done:
