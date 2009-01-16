@@ -1,4 +1,4 @@
-VERSION := $(shell perl -ne 's/^\# Version: // and print' commit-patch)
+VERSION := $(shell perl -ne '/VERSION\s*=\s*'"'(.*)'"'/ and print "$$1"' commit-patch)
 
 all: executable commit-partial commit-patch.1 commit-partial.1 commit-patch.html
 
