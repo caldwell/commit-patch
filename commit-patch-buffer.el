@@ -55,8 +55,8 @@
      `(lambda () ',patch-files)
      "*commit*")))
 
-(when (require 'diff-mode)
+(eval-after-load 'diff-mode '(progn
   (setq diff-default-read-only nil)
-  (define-key diff-mode-map "\C-c\C-c" 'commit-patch-buffer))
+  (define-key diff-mode-map "\C-c\C-c" 'commit-patch-buffer)))
 
 (provide 'commit-patch-buffer)
