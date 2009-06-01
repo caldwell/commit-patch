@@ -28,6 +28,7 @@ sub run {
 
 my %clean; # Rename keys to values on any error (rollback). Unlinks keys on success.
 my $repo=".";
+my $amend;
 my %vc;
 while (!$vc{name}) {
     if (-d "$repo/CVS" && $repo eq '.') {
@@ -56,9 +57,11 @@ while (!$vc{name}) {
         $vc{add}          = 'darcs add';
         $vc{remove}       = 'true';
         $vc{commit}       = 'darcs record --all';
+        $vc{amend}        = 'darcs amend-record --all';
         $vc{patcharg}     = '-p1';
         $vc{lsdiffarg}    = [qw(--strip 1)];
         $vc{message}      = sub {
+            return () if $amend; # Darcs amend doesn't have --logfile, so don't support comments on amend.
             # Darcs doesn't like multiline -m comments so we have to put the log message into a file and use --logfile. Yuck.
             #return ('-m', $_[0]);
             my $message = $_[0];
@@ -69,7 +72,7 @@ while (!$vc{name}) {
             $clean{$message_filename} = undef; # make sure we delete this file on exit.
             ("--logfile=$message_filename");
         };
-        $vc{message_file} = sub { ("--logfile=$_[0]" ) };
+        $vc{message_file} = sub { die "Darcs doesn't support --message-file and --amend" if $amend; ("--logfile=$_[0]" ) };
     } elsif (-d "$repo/.hg") {
         $vc{name}         = 'hg';
         $vc{diff}         = 'hg diff';
@@ -83,8 +86,11 @@ while (!$vc{name}) {
     } elsif (-d "$repo/.git") {
         $vc{name}         = 'git';
         $vc{diff}         = 'git diff';
+        $vc{commit}       = 'git commit';
+        $vc{amend}        = 'git commit --amend';
         $vc{message}      = sub { ('-m', $_[0]) };
         $vc{message_file} = sub { ('-F', $_[0]) };
+        $vc{previous_message} = sub { my $prev; run([qw(git log -1 --pretty=format:%s%n%b)], '>', \$prev); $prev };
         # Git is special cased below.
     } else {
         $repo.="/..";
@@ -99,6 +105,7 @@ my $commit_patch  = !$commit_partial;
 my ($message, $message_filename);
 GetOptions("h|help" => sub { pod2usage(1) },
            "n|dry-run"        => \$dry_run,
+           "a|amend"          => \$amend,
            "v|verbose"        => \$verbose,
            "version"          => sub { print "Version $VERSION\n"; exit },
            $commit_patch ?
@@ -110,23 +117,27 @@ GetOptions("h|help" => sub { pod2usage(1) },
 my $patch;
 $patch = shift if $commit_patch;
 
+my $vc_commit = $amend ? ($vc{amend} || die "$vc{name} does not support amending.\n") : $vc{commit};
+
 # commit-partial creates a patch file for them and launches their editor.
 if ($commit_partial) {
     $patch = "commit.$$.patch";
     $clean{$patch} = undef;
 
+    my $previous_message = !$amend ? '' : $vc{previous_message} && trim $vc{previous_message}->();
+    $message = $previous_message;
     open PATCH, '>', $patch or die "$patch: $!\n";
-    print PATCH "\n",
+    print PATCH "$message\n",
                 "# Enter your commit comment above and edit your patch below.\n",
                 "# (Lines starting with # will be stripped and leading and trailing whitespace removed).\n",
                 "# An empty comment will cancel the operation.\n",
-                "==END_COMMENT==\n";
+                "==END_COMMENT==\n" if defined $message;
     close PATCH;
 
     run([split(/ /,$vc{diff}), @ARGV], '>>', $patch);
     system($ENV{VISUAL} || $ENV{EDITOR} || 'vi', $patch);
 
-    $message = '';
+  if (defined $message) {
     open PATCH, '<', $patch or die "couldn't read $patch: $!\n";
     while (<PATCH>) {
         next if /^\#/;
@@ -137,12 +148,14 @@ if ($commit_partial) {
   finished:
     $message =~ s/^\s*//;
     $message =~ s/\s*$//;
+  }
+    undef $message if $amend && $message && $message eq $previous_message;
 
-    die "No commit message, so I'm not going to do anything.\n" if $message eq '';
+    die "No commit message, so I'm not going to do anything.\n" if !$amend && $message eq '';
 }
 
 die "bad patch file: $!" if -z $patch;
-die "Invalid message" if defined $message && $message eq "";
+die "Invalid message" if !$amend && defined $message && $message eq "";
 
 my @message_opt = $message          ? $vc{message}->($message) :
                   $message_filename ? $vc{message_file}->($message_filename) : ();
@@ -151,7 +164,7 @@ my @message_opt = $message          ? $vc{message}->($message) :
 if ($vc{name} eq 'git') {
     run([qw(git diff --cached --quiet)]) or die "The index is not empty. Cowardly refusing to do anything potentially harmful.\n";
     run([qw(git apply --cached), $patch]) or die "Git failed.\n";
-    run([qw(git commit), @message_opt]) or die "Git failed.\n";
+    run([split(/ /,$vc_commit), @message_opt]) or die "Git failed.\n";
     exit;
 }
 
@@ -180,7 +193,7 @@ eval {
     run(["patch", $vc{patcharg}, "-R"], '<', "working.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
     run(["patch", $vc{patcharg}], '<', $patch,                                          '>', \$out, '2>', \$err) or die "$out\n$err\n";
     # Don't capture stdout or stderr because it can be interactive (cough cough darcs)
-    run([split(/ /,$vc{commit}), @message_opt,                                               @files],debug => 0) or die "commit failed.\n";
+    run([split(/ /,$vc_commit), @message_opt,                                               @files],debug => 0) or die "commit failed.\n";
     run(["patch", $vc{patcharg}], '<', "non_committed.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
 };
 sub clean() {
