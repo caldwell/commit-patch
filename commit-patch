@@ -154,8 +154,8 @@ if ($commit_partial) {
         die "Couldn't find comment terminator (==END_COMMENT==)\n";
       finished:
         $message = trim($message);
+        undef $message if $amend && $message eq $previous_message;
     }
-    undef $message if $amend && $message && $message eq $previous_message;
 
     die "No commit message, so I'm not going to do anything.\n" if !$amend && $message eq '';
 }
