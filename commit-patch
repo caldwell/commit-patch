@@ -144,17 +144,17 @@ if ($commit_partial) {
     run([split(/ /,$vc{diff}), @ARGV], '>>', $patch);
     system(($ENV{VISUAL} || $ENV{EDITOR} || 'vi')." ".$patch);
 
-  if (defined $message) {
-    open PATCH, '<', $patch or die "couldn't read $patch: $!\n";
-    while (<PATCH>) {
-        next if /^\#/;
-        goto finished if /^==END_COMMENT==$/;
+    if (defined $message) {
+        open PATCH, '<', $patch or die "couldn't read $patch: $!\n";
+        while (<PATCH>) {
+            next if /^\#/;
+            goto finished if /^==END_COMMENT==$/;
         $message .= $_;
+        }
+        die "Couldn't find comment terminator (==END_COMMENT==)\n";
+      finished:
+        $message = trim($message);
     }
-    die "Couldn't find comment terminator (==END_COMMENT==)\n";
-  finished:
-    $message = trim($message);
-  }
     undef $message if $amend && $message && $message eq $previous_message;
 
     die "No commit message, so I'm not going to do anything.\n" if !$amend && $message eq '';
