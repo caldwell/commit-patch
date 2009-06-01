@@ -26,6 +26,13 @@ sub run {
     IPC::Run::run(@_);
 }
 
+sub trim($) {
+    my $s = shift;
+    $s =~ s/^\s*//;
+    $s =~ s/\s*$//;
+    $s
+}
+
 my %clean; # Rename keys to values on any error (rollback). Unlinks keys on success.
 my $repo=".";
 my $amend;
@@ -146,8 +153,7 @@ if ($commit_partial) {
     }
     die "Couldn't find comment terminator (==END_COMMENT==)\n";
   finished:
-    $message =~ s/^\s*//;
-    $message =~ s/\s*$//;
+    $message = trim($message);
   }
     undef $message if $amend && $message && $message eq $previous_message;
 
