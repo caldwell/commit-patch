@@ -142,7 +142,7 @@ if ($commit_partial) {
     close PATCH;
 
     run([split(/ /,$vc{diff}), @ARGV], '>>', $patch);
-    system($ENV{VISUAL} || $ENV{EDITOR} || 'vi', $patch);
+    system(($ENV{VISUAL} || $ENV{EDITOR} || 'vi')." ".$patch);
 
   if (defined $message) {
     open PATCH, '<', $patch or die "couldn't read $patch: $!\n";
