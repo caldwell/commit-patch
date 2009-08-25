@@ -197,24 +197,24 @@ die "No files in patch" unless scalar @files;
 #print "Found $vc{name} in $repo\n";
 #printf("files: %s\n", join(",", @files));
 
-    for my $f (@files) {
-        run ["cp", "-f", $f, "$f.orig.$$"] or die "couldn't make backup of $f: $!" if -f $f;
-        $clean{"$f.orig.$$"} = $f;
-    }
-    $SIG{PIPE} = $SIG{INT} = $SIG{QUIT} = sub { clean(); print "Cleanly aborted\n"; };
+for my $f (@files) {
+    run ["cp", "-f", $f, "$f.orig.$$"] or die "couldn't make backup of $f: $!" if -f $f;
+    $clean{"$f.orig.$$"} = $f;
+}
+$SIG{PIPE} = $SIG{INT} = $SIG{QUIT} = sub { clean(); print "Cleanly aborted\n"; };
 
-    $clean{"working.patch.$$"} = $clean{"non_committed.patch.$$"} = undef;
+$clean{"working.patch.$$"} = $clean{"non_committed.patch.$$"} = undef;
 
-    my ($out,$non_committed_patch);
-    run([split(/ /,$vc{add}),    @files],                                               '>', \$out, '2>', \$err);# Expect these 2 to fail when
-    run([split(/ /,$vc{remove}), @files],                                               '>', \$out, '2>', \$err);# there are no new files.
-    run([split(/ /,$vc{diff}),   @files], '>', "working.patch.$$",                                  '2>', \$err);# CVS diff dies. Sigh. or die "$err\n";
-    run(["interdiff", $vc{patcharg}, $patch, "working.patch.$$"], '>', "non_committed.patch.$$",    '2>', \$err) or die "$err\n";
-    run(["patch", $vc{patcharg}, "-R"], '<', "working.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
-    run(["patch", $vc{patcharg}], '<', $patch,                                          '>', \$out, '2>', \$err) or die "$out\n$err\n";
-    # Don't capture stdout or stderr because it can be interactive (cough cough darcs)
-    run([split(/ /,$vc_commit), @message_opt,                                               @files],debug => 0) or die "commit failed.\n";
-    run(["patch", $vc{patcharg}], '<', "non_committed.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
+my ($out,$non_committed_patch);
+run([split(/ /,$vc{add}),    @files],                                               '>', \$out, '2>', \$err);# Expect these 2 to fail when
+run([split(/ /,$vc{remove}), @files],                                               '>', \$out, '2>', \$err);# there are no new files.
+run([split(/ /,$vc{diff}),   @files], '>', "working.patch.$$",                                  '2>', \$err);# CVS diff dies. Sigh. or die "$err\n";
+run(["interdiff", $vc{patcharg}, $patch, "working.patch.$$"], '>', "non_committed.patch.$$",    '2>', \$err) or die "$err\n";
+run(["patch", $vc{patcharg}, "-R"], '<', "working.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
+run(["patch", $vc{patcharg}], '<', $patch,                                          '>', \$out, '2>', \$err) or die "$out\n$err\n";
+# Don't capture stdout or stderr because it can be interactive (cough cough darcs)
+run([split(/ /,$vc_commit), @message_opt,                                               @files],debug => 0) or die "commit failed.\n";
+run(["patch", $vc{patcharg}], '<', "non_committed.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
 
 END {
     return if $dry_run;
