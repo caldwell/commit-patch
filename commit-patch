@@ -219,7 +219,7 @@ eval {
 };
 sub clean() {
     return if $dry_run;
-    foreach my $k (keys %clean) { rename $k,$clean{$k} if $clean{$k} }
+    foreach my $k (grep { $clean{$_} } keys %clean) { rename $k,$clean{$k}; delete $clean{$k} }
 }
 if ($@) {
     clean();
