@@ -153,6 +153,11 @@ if ($commit_partial) {
 
     run([split(/ /,$vc{diff}), @ARGV], '>>', $patch);
     system(($ENV{VISUAL} || $ENV{EDITOR} || 'vi')." ".$patch);
+    my $last_patch = "#last-comit-partial.patch";
+    unlink "$last_patch.3";
+    rename "$last_patch.2", "$last_patch.3";
+    rename "$last_patch", "$last_patch.2";
+    link $patch, $last_patch;
 
     if (defined $message) {
         open PATCH, '<', $patch or die "couldn't read $patch: $!\n";
