@@ -197,7 +197,6 @@ die "No files in patch" unless scalar @files;
 #print "Found $vc{name} in $repo\n";
 #printf("files: %s\n", join(",", @files));
 
-eval {
     for my $f (@files) {
         run ["cp", "-f", $f, "$f.orig.$$"] or die "couldn't make backup of $f: $!" if -f $f;
         $clean{"$f.orig.$$"} = $f;
@@ -206,7 +205,7 @@ eval {
 
     $clean{"working.patch.$$"} = $clean{"non_committed.patch.$$"} = undef;
 
-    my ($out,$err,$non_committed_patch);
+    my ($out,$non_committed_patch);
     run([split(/ /,$vc{add}),    @files],                                               '>', \$out, '2>', \$err);# Expect these 2 to fail when
     run([split(/ /,$vc{remove}), @files],                                               '>', \$out, '2>', \$err);# there are no new files.
     run([split(/ /,$vc{diff}),   @files], '>', "working.patch.$$",                                  '2>', \$err);# CVS diff dies. Sigh. or die "$err\n";
@@ -216,16 +215,14 @@ eval {
     # Don't capture stdout or stderr because it can be interactive (cough cough darcs)
     run([split(/ /,$vc_commit), @message_opt,                                               @files],debug => 0) or die "commit failed.\n";
     run(["patch", $vc{patcharg}], '<', "non_committed.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
-};
-sub clean() {
+
+END {
     return if $dry_run;
-    foreach my $k (grep { $clean{$_} } keys %clean) { rename $k,$clean{$k}; delete $clean{$k} }
+    if ($?) { # Did we die?
+        foreach my $k (grep { $clean{$_} } keys %clean) { rename $k,$clean{$k}; delete $clean{$k} }
+    }
+    foreach my $k (keys %clean) { unlink $k }
 }
-if ($@) {
-    clean();
-    die "Failed: $@";
-}
-foreach my $k (keys %clean) { unlink $k }
 
 
 =head1 NAME
