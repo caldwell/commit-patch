@@ -234,9 +234,9 @@ commit-patch - commit patches to I<Darcs>, I<Git>, I<CVS>, I<Subversion>, or I<M
 
 =head1 SYNOPSIS
 
-commit-patch [B<-m> I<message>] [B<-F> I<message-file>] [B<-v>] [B<-n>] [I<patch-file>]
+commit-patch [B<--amend>] [B<-m> I<message>] [B<-F> I<message-file>] [B<-v>] [B<-n>] [I<patch-file>]
 
-commit-partial [B<-v>] [B<-n>] [I<file> ...]
+commit-partial [B<--amend>] [B<-v>] [B<-n>] [I<file> ...]
 
 =head1 DESCRIPTION
 
@@ -259,6 +259,11 @@ B<commit-patch> currently supports the following version control systems:
 B<I<Darcs>>, B<I<Git>>, B<I<CVS>>, B<I<Subversion>>, and B<I<Mercurial>>.
 
 =head1 OPTIONS
+
+B<-a>, B<--amend> - Amend a previous commit. Currently only B<I<Darcs>> and
+B<I<Git>> support this option. When used with B<I<Git>> it will amend the
+previous commit. When used with B<I<Darcs>>, B<I<Darcs>> will ask you which
+patch you want to amend.
 
 B<-m>, B<--message>=I<message> - An optional I<message> to use as the commit
 text. If the message is multiple lines then I<Darcs>, I<Git>, and I<Mercurial>
