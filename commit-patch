@@ -120,9 +120,18 @@ GetOptions("h|help" => sub { pod2usage(1) },
               "F|message-file=s" => \$message_filename)
              : # commit-partial
              (),
-    ) and (scalar @ARGV == 1 || $commit_partial) or pod2usage(2);
+    ) and ($commit_patch   && scalar @ARGV <= 1 ||
+           $commit_partial && scalar @ARGV == 0) or pod2usage(2);
+
 my $patch;
-$patch = shift if $commit_patch;
+if ($commit_patch) {
+    if (scalar @ARGV == 1) {
+        $patch = shift;
+    } else {
+        (my $p, $patch) = tempfile("commit-patch-patch-XXXXXXXX", UNLINK=>0);
+        print $p $_ while (<>);
+    }
+}
 
 my $vc_commit = $amend ? ($vc{amend} || die "$vc{name} does not support amending.\n") : $vc{commit};
 
@@ -219,7 +228,7 @@ commit-patch - commit patches to I<Darcs>, I<Git>, I<CVS>, I<Subversion>, or I<M
 
 =head1 SYNOPSIS
 
-commit-patch [B<-m> I<message>] [B<-F> I<message-file>] [B<-v>] [B<-n>] I<patch-file>
+commit-patch [B<-m> I<message>] [B<-F> I<message-file>] [B<-v>] [B<-n>] [I<patch-file>]
 
 commit-partial [B<-v>] [B<-n>] [I<file> ...]
 
@@ -229,7 +238,8 @@ Normally version control systems don't allow fine grained
 commits. B<commit-patch> allows the user to control I<exactly> what
 gets committed (or "recorded", in I<Darcs> parlance) by letting the user
 supply a patch to be committed rather than using the files in the
-current working directory.
+current working directory. If I<patch-file> is not supplied on the
+command line then the patch will be read from standard input.
 
 B<commit-partial> is like commit-patch except that it will create a
 patch from the current changes in the current working directory and
