@@ -234,9 +234,9 @@ commit-patch - commit patches to I<Darcs>, I<Git>, I<CVS>, I<Subversion>, or I<M
 
 =head1 SYNOPSIS
 
-commit-patch [B<--amend>] [B<-m> I<message>] [B<-F> I<message-file>] [B<-v>] [B<-n>] [I<patch-file>]
+commit-patch [B<--amend>] [B<-m> I<message>] [B<-F> I<message-file>] [B<-v>] [B<--dry-run>] [I<patch-file>]
 
-commit-partial [B<--amend>] [B<-v>] [B<-n>] [I<file> ...]
+commit-partial [B<--amend>] [B<-v>] [B<--dry-run>] [I<file> ...]
 
 =head1 DESCRIPTION
 
