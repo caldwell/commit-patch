@@ -36,9 +36,9 @@
                 (with-current-buffer output-buffer
                   (erase-buffer)
                   (let* ((default-directory ,directory) 
-                         (status (call-process "commit-patch" nil
+                         (status (process-file "commit-patch" patch
                                                output-buffer 'display
-                                               "-m" comment patch)))
+                                               "-m" comment)))
                     (if (not (eq status 0))
                         (message "Commit patch failed with a status of '%S' (%S)." status patch)
                       (mapc (lambda (buf) (with-current-buffer buf
