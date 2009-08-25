@@ -130,6 +130,7 @@ if ($commit_patch) {
     } else {
         (my $p, $patch) = tempfile("commit-patch-patch-XXXXXXXX", UNLINK=>0);
         print $p $_ while (<>);
+        $clean{$patch} = undef;
     }
 }
 
