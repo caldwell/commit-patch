@@ -52,7 +52,7 @@
                                ,(length patch-files) ,(length visiting-buffers))))))
             (delete-file patch))))
      nil
-     `(lambda () ',patch-files)
+     `((log-edit-listfun . (lambda () ',patch-files)))
      "*commit*")))
 
 (eval-after-load 'diff-mode '(progn
