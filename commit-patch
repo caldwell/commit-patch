@@ -121,7 +121,7 @@ GetOptions("h|help" => sub { pod2usage(1) },
              : # commit-partial
              (),
     ) and ($commit_patch   && scalar @ARGV <= 1 ||
-           $commit_partial && scalar @ARGV == 0) or pod2usage(2);
+           $commit_partial) or pod2usage(2);
 
 my $patch;
 if ($commit_patch) {
