@@ -4,16 +4,17 @@ commit-patch - commit patches to Darcs, Git, CVS, Subversion, or Mercurial
 PREREQUISITES
        commit-patch relies on several programs to get the job done:
 
-          perl      - <http://www.perl.org>
-          IPC::Run  - <http://search.cpan.org/dist/IPC-Run/>
-          patch     - <http://www.gnu.org/software/patch/>
-          interdiff - <http://cyberelk.net/tim/data/patchutils/>
-          cp        - Ideally installed on your system already. :-)
+          perl       - <http://www.perl.org>
+          IPC::Run   - <http://search.cpan.org/dist/IPC-Run/>
+          patch      - <http://www.gnu.org/software/patch/>
+          interdiff  - <http://cyberelk.net/tim/data/patchutils/>
+          cp         - Ideally installed on your system already. :-)
        and, of course, one of:
-          darcs     - <http://darcs.net/>
-          git       - <http://git.or.cz/>
-          mercurial - <http://www.selenic.com/mercurial/>
-          cvs       - <http://www.nongnu.org/cvs/>
+          darcs      - <http://darcs.net/>
+          git        - <http://git.or.cz/>
+          mercurial  - <http://www.selenic.com/mercurial/>
+          subversion - <http://subversion.tigris.org/>
+          cvs        - <http://www.nongnu.org/cvs/>
 
        commit-patch is known to run on Linux and Mac OS X. It is perl,
        so ideally it will run anywhere, but we have never tested in
