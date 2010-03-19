@@ -90,6 +90,17 @@ while (!$vc{name}) {
         $vc{remove}       = 'true';
         $vc{patcharg}     = '-p1';
         $vc{lsdiffarg}    = [qw(--strip 1)];
+    } elsif (-d "$repo/.bzr") {
+        $vc{name}         = 'bzr';
+        $vc{diff}         = 'bzr diff';
+        $vc{commit}       = 'bzr commit';
+        $vc{message}      = sub { ('-m', $_[0]) };
+        $vc{message_file} = sub { ('--file', $_[0]) };
+        $vc{add}          = 'bzr add';
+        $vc{remove}       = 'true';
+        $vc{patcharg}     = '-p0';
+        $vc{lsdiffarg}    = [];
+        chdir $repo; # otherwise commit-partial from within a project subdir fails.
     } elsif (-d "$repo/.git") {
         $vc{name}         = 'git';
         $vc{diff}         = 'git diff';
