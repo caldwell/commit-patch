@@ -1,0 +1,27 @@
+commit-patch (2.2)
+
+  * Added SVN support from Peter Mack & Joel Hillacre <support@emergence.com>.
+
+  * Made commit-partial work with git.
+
+ -- David Caldwell <david@porkrind.org>  Fri, 16 Jan 2009 17:09:56 -0800
+
+commit-patch (2.1)
+
+  * Added Git support.
+
+  * Added "commit-partial". (inspired by Pistos <pistos@gmail.com>)
+
+  * Added --verbose and --dry-run options.
+
+  * Added --message-file option. (inspired by Pistos <pistos@gmail.com>)
+
+  * Fix lsdiff on CVS sub directories. (thanks: Pistos <pistos@gmail.com>)
+
+ -- David Caldwell <david@porkrind.org>  Mon, 22 Dec 2008 17:05:14 -0800
+
+commit-patch (2.0)
+
+  * Release 2.0 (rewritten perl version of cvs-commit-patch)
+
+ -- David Caldwell <david@porkrind.org>  Wed, 23 Aug 2006 17:04:33 -0700
