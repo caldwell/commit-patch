@@ -3,7 +3,7 @@
 #                     and Jim Radford <radford@bleackbean.org>, All Rights Reserved.
 # This code can be distributed under the terms of the GNU Public License
 
-my $VERSION = '2.2';
+my $VERSION = '2.3';
 
 use strict;
 use Cwd qw(abs_path);
