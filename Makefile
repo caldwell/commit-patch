@@ -33,6 +33,8 @@ install: $(ALL)
 	mkdir -p "$(PREFIX)/bin"
 	mkdir -p "$(PREFIX)/share/man/man1"
 	mkdir -p "$(PREFIX)/share/emacs/site-lisp"
+	mkdir -p "$(PREFIX)/share/doc/commit-patch"
 	cp -a $(BIN)   "$(PREFIX)/bin"
 	cp -a $(MAN)   "$(PREFIX)/share/man/man1"
 	cp -a $(ELISP) "$(PREFIX)/share/emacs/site-lisp"
+	cp -a $(DOC)   "$(PREFIX)/share/doc/commit-patch"
