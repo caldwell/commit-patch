@@ -17,6 +17,12 @@ PREREQUISITES
           subversion - <http://subversion.tigris.org/>
           cvs        - <http://www.nongnu.org/cvs/>
 
+       On Debian:
+         apt-get install libipc-run-perl patch patchutils
+
+       On Fedora:
+         yum install perl-IPC-Run patch patchutils
+
        commit-patch is known to run on Linux and Mac OS X. It is perl,
        so ideally it will run anywhere, but we have never tested in
        other environments, most notably Windows. Use at your own risk.
