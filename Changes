@@ -1,3 +1,33 @@
+commit-patch (2.3)
+
+  * Added Bazaar (bzr) support.
+
+  * Added amend support (via new --amend flag). It's only supported by git
+    and darcs at the moment.
+
+  * It now gets rid of unnecessary spaces before and after commit message.
+
+  * Allowed VISUAL/EDITOR environment variables to have spaces in them.
+    (So that 'VISUAL="emacs -nw" commit-partial' works).
+
+  * commit-partial now keeps the last few patch/commit-message files
+    around for easy reuse when a commit fails.
+
+  * Patches can now come from stdin.
+
+  * commit-patch-buffer.el loads diff-mode on demand for faster emacs
+    startups (Jim Radford <radford@blackbean.org>).
+
+  * commit-patch-buffer.el can commit-patch a file loaded with tramp.
+
+  * Fixed commit-patch-buffer.el so it works with Emacs 23
+    (Jonathan Kotta <jpkotta@gmail.com>).
+
+  * commit-patch-buffer.el only displays commit-patch output when there
+    was an error (Jonathan Kotta <jpkotta@gmail.com>).
+
+ -- David Caldwell <david@porkrind.org>  Thu, 18 Mar 2010 20:02:43 -0700
+
 commit-patch (2.2)
 
   * Added SVN support from Peter Mack & Joel Hillacre <support@emergence.com>.
