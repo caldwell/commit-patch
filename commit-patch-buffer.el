@@ -26,10 +26,8 @@
      `(lambda () (interactive)
         (let ((patch (make-temp-file "commit-buffer" nil))
               (comment (buffer-string))
-              (output-buffer (window-buffer
-                              (display-buffer
-                               (get-buffer-create "*commit-patch*")))))
-          (unwind-protect 
+              (output-buffer (get-buffer-create "*commit-patch*")))
+          (unwind-protect
               (progn
                 (with-current-buffer ,buffer
                   (write-region (point-min) (point-max) patch))
@@ -40,7 +38,9 @@
                                                output-buffer 'display
                                                "-m" comment)))
                     (if (not (eq status 0))
-                        (message "Commit patch failed with a status of '%S' (%S)." status patch)
+                        (progn
+                          (window-buffer (display-buffer output-buffer))
+                          (message "Commit patch failed with a status of '%S' (%S)." status patch))
                       (mapc (lambda (buf) (with-current-buffer buf
                                             (vc-resynch-buffer (buffer-file-name buf) 'revert 'noquery)
                                             ;; stupid vc-revert-buffer1 doesn't call revert-buffer
