@@ -16,7 +16,7 @@ commit-patch.html: commit-patch
 
 release: commit-patch-$(VERSION).tar.gz
 
-commit-patch-$(VERSION).tar.gz: commit-patch commit-partial commit-patch-buffer.el commit-patch.1 commit-partial.1 commit-patch.html Makefile README COPYING ChangeLog
+commit-patch-$(VERSION).tar.gz: commit-patch commit-partial commit-patch-buffer.el commit-patch.1 commit-partial.1 commit-patch.html Makefile README COPYING Changes
 	mkdir commit-patch-$(VERSION)
 	rsync -a $^ commit-patch-$(VERSION)
 	tar czf commit-patch-$(VERSION).tar.gz commit-patch-$(VERSION)
