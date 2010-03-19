@@ -212,7 +212,7 @@ for my $f (@files) {
     run ["cp", "-f", $f, "$f.orig.$$"] or die "couldn't make backup of $f: $!" if -f $f;
     $clean{"$f.orig.$$"} = $f;
 }
-$SIG{PIPE} = $SIG{INT} = $SIG{QUIT} = sub { clean(); print "Cleanly aborted\n"; };
+$SIG{PIPE} = $SIG{INT} = $SIG{QUIT} = sub { print "Cleanly aborting..\n"; };
 
 $clean{"working.patch.$$"} = $clean{"non_committed.patch.$$"} = undef;
 
