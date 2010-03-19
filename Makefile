@@ -1,10 +1,6 @@
 VERSION := $(shell perl -ne '/VERSION\s*=\s*'"'(.*)'"'/ and print "$$1"' commit-patch)
 
-all: executable commit-partial commit-patch.1 commit-partial.1 commit-patch.html
-
-# Darcs loses the x bit. :-(
-executable:
-	chmod +x commit-patch
+all: commit-partial commit-patch.1 commit-partial.1 commit-patch.html
 
 commit-partial:
 	ln -s commit-patch commit-partial
