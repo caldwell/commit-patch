@@ -56,9 +56,14 @@
      "*commit*")))
 
 (defun commit-patch-buffer ()
-  "Commit the patch in the current buffer, applying it to the appropriate directory."
+  "Commit the patch in the current buffer, applying it to the
+appropriate directory. If the current buffer is not in diff-mode
+then it will ask interactively which buffer to commit and to which
+directory to commit it."
   (interactive)
-  (commit-patch-buffer-manually (buffer-name) (autodetect-patch-directory-root)))
+  (if (eq major-mode 'diff-mode)
+      (commit-patch-buffer-manually (buffer-name) (autodetect-patch-directory-root))
+    (call-interactively 'commit-patch-buffer-manually)))
 
 (defun autodetect-patch-directory-root ()
   "Tries to autodect where a patch should be committed from using the
