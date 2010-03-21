@@ -55,6 +55,11 @@
      `((log-edit-listfun . (lambda () ',patch-files)))
      "*commit*")))
 
+(defun commit-patch-current-buffer (directory)
+  "Commit the patch in the current buffer applying it from DIRECTORY."
+  (interactive "DDirectory: ")
+  (commit-patch-buffer (buffer-name) directory))
+
 (eval-after-load 'diff-mode '(progn
   (setq diff-default-read-only nil)
   (define-key diff-mode-map "\C-c\C-c" 'commit-patch-buffer)))
