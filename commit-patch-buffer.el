@@ -6,7 +6,7 @@
 (require 'vc)
 (require 'log-edit)
 
-(defun commit-patch-buffer (buffer directory)
+(defun commit-patch-buffer-manually (buffer directory)
   "Commit the patch found in BUFFER applying it from DIRECTORY."
   (interactive "bBuffer to commit: \nDDirectory: ")
   (let* ((patch-files (with-temp-buffer
@@ -55,15 +55,10 @@
      `((log-edit-listfun . (lambda () ',patch-files)))
      "*commit*")))
 
-(defun commit-patch-current-buffer (directory)
-  "Commit the patch in the current buffer applying it from DIRECTORY."
-  (interactive "DDirectory: ")
-  (commit-patch-buffer (buffer-name) directory))
-
-(defun commit-patch-current-buffer-autodetect-directory ()
-  "Commit the patch in the current buffer applying it to the appropriate directory."
+(defun commit-patch-buffer ()
+  "Commit the patch in the current buffer, applying it to the appropriate directory."
   (interactive)
-  (commit-patch-current-buffer (autodetect-patch-directory-root)))
+  (commit-patch-buffer-manually (buffer-name) (autodetect-patch-directory-root)))
 
 (defun autodetect-patch-directory-root ()
   "Tries to autodect where a patch should be committed from using the
