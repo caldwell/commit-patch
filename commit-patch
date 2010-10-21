@@ -120,7 +120,7 @@ while (!$vc{name}) {
 my $commit_partial = $0 =~ /commit-partial/;
 my $commit_patch  = !$commit_partial;
 
-my ($message, $message_filename);
+my ($message, $message_filename, $retry);
 GetOptions("h|help" => sub { pod2usage(1) },
            "n|dry-run"        => \$dry_run,
            "a|amend"          => \$amend,
@@ -130,7 +130,7 @@ GetOptions("h|help" => sub { pod2usage(1) },
              ("m|message=s"      => \$message,
               "F|message-file=s" => \$message_filename)
              : # commit-partial
-             (),
+             ("r|retry"          => \$retry),
     ) and ($commit_patch   && scalar @ARGV <= 1 ||
            $commit_partial) or pod2usage(2);
 
@@ -154,15 +154,20 @@ if ($commit_partial) {
 
     my $previous_message = !$amend ? '' : $vc{previous_message} && trim $vc{previous_message}->();
     $message = $previous_message;
-    open PATCH, '>', $patch or die "$patch: $!\n";
-    print PATCH "$message\n",
-                "# Enter your commit comment above and edit your patch below.\n",
-                "# (Lines starting with # will be stripped and leading and trailing whitespace removed).\n",
-                "# An empty comment will cancel the operation.\n",
-                "==END_COMMENT==\n" if defined $message;
-    close PATCH;
+    if ($retry) {
+        use File::Copy;
+        copy("#last-comit-partial.patch", $patch);
+    } else {
+        open PATCH, '>', $patch or die "$patch: $!\n";
+        print PATCH "$message\n",
+                    "# Enter your commit comment above and edit your patch below.\n",
+                    "# (Lines starting with # will be stripped and leading and trailing whitespace removed).\n",
+                    "# An empty comment will cancel the operation.\n",
+                    "==END_COMMENT==\n" if defined $message;
+        close PATCH;
 
-    run([split(/ /,$vc{diff}), @ARGV], '>>', $patch);
+        run([split(/ /,$vc{diff}), @ARGV], '>>', $patch);
+    }
     system(($ENV{VISUAL} || $ENV{EDITOR} || 'vi')." ".$patch);
     my $last_patch = "#last-comit-partial.patch";
     unlink "$last_patch.3";
