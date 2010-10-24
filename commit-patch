@@ -297,7 +297,7 @@ that B<commit-patch> is running to get the patch committed.
 
 B<-n>, B<--dry-run> - Turn on more paranoid debugging. This will print
 the commands that B<commit-patch> will run to get the patch committed
-but it wont actually run those commands.
+but it won't actually run those commands.
 
 =head1 DIAGNOSTICS
 
