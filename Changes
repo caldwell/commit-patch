@@ -1,3 +1,13 @@
+commit-patch (2.4)
+
+  * Added --retry option to commit-partial for retrying failed patches.
+
+  * Added auto-detect support to commit-patch-buffer. Pass a prefix arg
+    (C--) to make it revert to the old behavior and ask for a patch buffer
+    and directory.
+
+ -- David Caldwell <david@porkrind.org>  Sun, 24 Oct 2010 15:23:22 -0700
+
 commit-patch (2.3)
 
   * Added Bazaar (bzr) support.
