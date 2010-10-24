@@ -1,0 +1,8 @@
+*~
+\#*
+*.patch
+*.html
+*.1
+*.orig
+commit-partial
+*.tmp
