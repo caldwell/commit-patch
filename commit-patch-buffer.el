@@ -7,7 +7,8 @@
 (require 'log-edit)
 
 (defun commit-patch-buffer-in-directory (buffer directory)
-  "Commit the patch found in BUFFER applying it from DIRECTORY."
+  "Commit the patch found in BUFFER by applying it to the repository in
+DIRECTORY with commit-patch(1)."
   (interactive "bBuffer to commit: \nDDirectory: ")
   (let* ((patch-files (with-temp-buffer
                         (let ((lsdiff (current-buffer)))
@@ -57,9 +58,10 @@
 
 (defun commit-patch-buffer (&optional arg)
   "Commit the patch in the current buffer, applying it to the
-appropriate directory. If the current buffer is not in diff-mode
-or ARG is non-nil then it will ask interactively which buffer to
-commit and to which directory to commit it."
+repository in the appropriate directory with commit-patch(1). If
+the current buffer is not in diff-mode or ARG is non-nil then it
+will ask interactively which buffer to commit and to which
+directory to commit it."
   (interactive "P")
   (if (and (not arg) (eq major-mode 'diff-mode))
       (commit-patch-buffer-in-directory (buffer-name) (autodetect-patch-directory-root))
