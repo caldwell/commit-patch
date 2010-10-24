@@ -249,7 +249,7 @@ commit-patch - commit patches to I<Darcs>, I<Git>, I<Mercurial>, I<Bazaar>, I<Su
 
 commit-patch [B<--amend>] [B<-m> I<message>] [B<-F> I<message-file>] [B<-v>] [B<--dry-run>] [I<patch-file>]
 
-commit-partial [B<--amend>] [B<-v>] [B<--dry-run>] [I<file> ...]
+commit-partial [B<--amend>] [B<-v>] [B<--dry-run>] [B<--retry>] [I<file> ...]
 
 =head1 DESCRIPTION
 
@@ -298,6 +298,11 @@ that B<commit-patch> is running to get the patch committed.
 B<-n>, B<--dry-run> - Turn on more paranoid debugging. This will print
 the commands that B<commit-patch> will run to get the patch committed
 but it won't actually run those commands.
+
+B<-r>, B<--retry> - Only available in I<commit-partial>. This will reload the
+last patch that was attempted to be committed into your editor instead of the
+current changes in the directory. This is for cases where the patch fails to
+commit for some reason and you want to try to fix it instead of starting over.
 
 =head1 DIAGNOSTICS
 
