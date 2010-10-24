@@ -55,13 +55,13 @@
      `((log-edit-listfun . (lambda () ',patch-files)))
      "*commit*")))
 
-(defun commit-patch-buffer ()
+(defun commit-patch-buffer (&optional arg)
   "Commit the patch in the current buffer, applying it to the
 appropriate directory. If the current buffer is not in diff-mode
-then it will ask interactively which buffer to commit and to which
-directory to commit it."
-  (interactive)
-  (if (eq major-mode 'diff-mode)
+or ARG is non-nil then it will ask interactively which buffer to
+commit and to which directory to commit it."
+  (interactive "P")
+  (if (and (not arg) (eq major-mode 'diff-mode))
       (commit-patch-buffer-in-directory (buffer-name) (autodetect-patch-directory-root))
     (call-interactively 'commit-patch-buffer-in-directory)))
 
