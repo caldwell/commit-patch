@@ -8,7 +8,7 @@ Homepage: http://porkrind.org/commit-patch/
 
 Package: commit-patch
 Architecture: all
-Depends: ${misc:Depends}, perl, libipc-run-perl, patch, patchutils
+Depends: ${misc:Depends}, ${perl:Depends}, libipc-run-perl, patch, patchutils
 Suggests: darcs | git | mercurial | bzr | subversion | cvs
 Description: utility to commit fine grained patches to source code control repositories
  Normally version control systems don't allow fine grained
