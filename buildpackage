@@ -1,0 +1,3 @@
+#!/bin/sh
+quilt pop -a
+git-buildpackage --git-upstream-branch=master ---git-debian-branch=debian -rfakeroot --git-ignore-new -i'$(buildpackage|\.git)^'
