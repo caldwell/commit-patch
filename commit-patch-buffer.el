@@ -1,6 +1,6 @@
 ;; Copyright 2003-2010 Jim Radford <radford@bleackbean.org>
 ;;                 and David Caldwell <david@porkrind.org>, All Rights Reserved.
-;; This code can be distributed under the terms of the GNU Public License
+;; This code can be distributed under the terms of the GNU Public License (Version 2 or greater).
 ;; Version: 2.1
 
 (require 'vc)
