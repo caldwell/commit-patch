@@ -1,0 +1,28 @@
+Description: Specify which version of the GPL we are licenced under.
+Author: David Caldwell <david@porkrind.org>
+
+Index: commit-patch/commit-patch
+===================================================================
+--- commit-patch.orig/commit-patch	2011-02-23 01:42:34.000000000 -0800
++++ commit-patch/commit-patch	2011-02-23 01:43:28.000000000 -0800
+@@ -1,7 +1,7 @@
+ #!/usr/bin/perl -w
+ # Copyright (c) 2003-2010 David Caldwell <david@porkrind.org>
+ #                     and Jim Radford <radford@bleackbean.org>, All Rights Reserved.
+-# This code can be distributed under the terms of the GNU Public License
++# This code can be distributed under the terms of the GNU Public License (Version 2 or greater).
+ 
+ my $VERSION = '2.4';
+ 
+Index: commit-patch/commit-patch-buffer.el
+===================================================================
+--- commit-patch.orig/commit-patch-buffer.el	2011-02-23 01:43:19.000000000 -0800
++++ commit-patch/commit-patch-buffer.el	2011-02-23 01:43:28.000000000 -0800
+@@ -1,6 +1,6 @@
+ ;; Copyright 2003-2010 Jim Radford <radford@bleackbean.org>
+ ;;                 and David Caldwell <david@porkrind.org>, All Rights Reserved.
+-;; This code can be distributed under the terms of the GNU Public License
++;; This code can be distributed under the terms of the GNU Public License (Version 2 or greater).
+ ;; Version: 2.1
+ 
+ (require 'vc)

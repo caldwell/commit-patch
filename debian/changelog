@@ -1,0 +1,16 @@
+commit-patch (2.4-1) unstable; urgency=low
+
+  * New upstream version.
+
+  * Upgraded to standards base 3.9.1.
+
+  * Fixed a slew of packaging issues pointed out by Gregor Herrmann
+    <gregoa@debian.org>.
+
+ -- David Caldwell <david@porkrind.org>  Wed, 23 Feb 2011 01:22:03 -0800
+
+commit-patch (2.3-1) unstable; urgency=low
+
+  * Initial Debian release (Closes: #574787)
+
+ -- David Caldwell <david@porkrind.org>  Sat, 20 Mar 2010 15:42:43 -0700

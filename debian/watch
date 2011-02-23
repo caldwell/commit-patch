@@ -1,0 +1,3 @@
+version=3
+
+http://www.porkrind.org/commit-patch commit-patch-(.*)\.tar\.gz

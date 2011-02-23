@@ -1,0 +1,12 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+override_dh_auto_install:
+	make install PREFIX=debian/commit-patch/usr
+	rm debian/commit-patch/usr/share/doc/commit-patch/COPYING
+
+%:
+	dh  $@
