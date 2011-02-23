@@ -8,6 +8,8 @@ override_dh_auto_install:
 	make install PREFIX=debian/commit-patch/usr
 	# No need for another copy of the GPL:
 	rm debian/commit-patch/usr/share/doc/commit-patch/COPYING
+	# Installed by dh_installchangelogs:
+	rm debian/commit-patch/usr/share/doc/commit-patch/Changes
 
 %:
 	dh  $@
