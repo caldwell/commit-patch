@@ -2,7 +2,7 @@ Source: commit-patch
 Section: vcs
 Priority: optional
 Maintainer: David Caldwell <david@porkrind.org>
-Build-Depends: debhelper (>= 7.0.50~), perl
+Build-Depends: debhelper (>= 8.0.0~), perl
 Standards-Version: 3.9.1
 Homepage: http://porkrind.org/commit-patch/
 
