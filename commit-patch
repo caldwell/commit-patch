@@ -219,18 +219,17 @@ for my $f (@files) {
 }
 $SIG{PIPE} = $SIG{INT} = $SIG{QUIT} = sub { print "Cleanly aborting..\n"; };
 
-$clean{"working.patch.$$"} = $clean{"non_committed.patch.$$"} = undef;
-
-my ($out,$non_committed_patch);
+my ($out, $working_patch, $non_committed_patch);
 run([split(/ /,$vc{add}),    @files],                                               '>', \$out, '2>', \$err);# Expect these 2 to fail when
 run([split(/ /,$vc{remove}), @files],                                               '>', \$out, '2>', \$err);# there are no new files.
-run([split(/ /,$vc{diff}),   @files], '>', "working.patch.$$",                                  '2>', \$err);# CVS diff dies. Sigh. or die "$err\n";
-run(["interdiff", $vc{patcharg}, $patch, "working.patch.$$"], '>', "non_committed.patch.$$",    '2>', \$err) or die "$err\n";
-run(["patch", $vc{patcharg}, "-R"], '<', "working.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
+run([split(/ /,$vc{diff}),   @files], '>', \$working_patch,                                     '2>', \$err);# CVS diff dies. Sigh. or die "$err\n";
+run(["interdiff", $vc{patcharg}, $patch, '-'], '<', \$working_patch,
+                                               '>', \$non_committed_patch,                      '2>', \$err) or die "$err\n";
+run(["patch", $vc{patcharg}, "-R"], '<', \$working_patch,                           '>', \$out, '2>', \$err) or die "$out\n$err\n";
 run(["patch", $vc{patcharg}], '<', $patch,                                          '>', \$out, '2>', \$err) or die "$out\n$err\n";
 # Don't capture stdout or stderr because it can be interactive (cough cough darcs)
 run([split(/ /,$vc_commit), @message_opt,                                               @files],debug => 0) or die "commit failed.\n";
-run(["patch", $vc{patcharg}], '<', "non_committed.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
+run(["patch", $vc{patcharg}], '<', \$non_committed_patch,                           '>', \$out, '2>', \$err) or die "$out\n$err\n";
 
 END {
     return if $dry_run;
