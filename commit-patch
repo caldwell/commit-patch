@@ -110,6 +110,16 @@ while (!$vc{name}) {
         $vc{message_file} = sub { ('-F', $_[0]) };
         $vc{previous_message} = sub { my $prev; run([qw(git log -1 --pretty=format:%s%n%b)], '>', \$prev); $prev };
         # Git is special cased below.
+    } elsif (-d "$repo/_MTN") {
+        $vc{name}         = 'mtn';
+        $vc{diff}         = 'mtn diff';
+        $vc{commit}       = 'mtn commit';
+        $vc{message}      = sub { ('-m', $_[0]) };
+        $vc{message_file} = sub { ('--message-file', $_[0]) };
+        $vc{add}          = 'mtn add';
+        $vc{remove}       = 'mtn drop';
+        $vc{patcharg}     = '-p0';
+        $vc{lsdiffarg}    = [];
     } else {
         $repo.="/..";
         printf("Trying back a dir: $repo, abs:%s\n", abs_path($repo));
