@@ -206,7 +206,7 @@ if ($vc{name} eq 'git') {
 }
 
 my ($lsdiff_out, $err);
-run ["lsdiff", '-s', @{$vc{lsdiffarg}}, $patch], '>', \$lsdiff_out, '2>', \$err or die "lsdiff|sort|unique : $! ($err)";
+run ["lsdiff", '-s', @{$vc{lsdiffarg}}, $patch], '>', \$lsdiff_out, '2>', \$err or die "lsdiff -s: $! ($err)";
 my %lsdiff = map { /^([-+!])\s+(.*)$/ or die "bad lsdiff line: $_\nOut:\n$lsdiff_out"; ( $2 => $1 ) } split(/\n/, $lsdiff_out);
 my @added   = grep { $lsdiff{$_} eq '+' } keys %lsdiff;
 my @removed = grep { $lsdiff{$_} eq '-' } keys %lsdiff;
