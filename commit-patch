@@ -110,6 +110,16 @@ while (!$vc{name}) {
         $vc{message_file} = sub { ('-F', $_[0]) };
         $vc{previous_message} = sub { my $prev; run([qw(git log -1 --pretty=format:%s%n%b)], '>', \$prev); $prev };
         # Git is special cased below.
+    } elsif (-d "$repo/_MTN") {
+        $vc{name}         = 'mtn';
+        $vc{diff}         = 'mtn diff';
+        $vc{commit}       = 'mtn commit';
+        $vc{message}      = sub { ('-m', $_[0]) };
+        $vc{message_file} = sub { ('--message-file', $_[0]) };
+        $vc{add}          = 'mtn add';
+        $vc{remove}       = 'mtn drop';
+        $vc{patcharg}     = '-p0';
+        $vc{lsdiffarg}    = [];
     } else {
         $repo.="/..";
         printf("Trying back a dir: $repo, abs:%s\n", abs_path($repo));
@@ -224,9 +234,12 @@ $SIG{PIPE} = $SIG{INT} = $SIG{QUIT} = sub { print "Cleanly aborting..\n"; };
 
 my ($out, $working_patch, $non_committed_patch);
 run([split(/ /,$vc{diff}),   @changed, @removed], '>', \$working_patch,                         '2>', \$err);# CVS diff dies. Sigh. or die "$err\n";
-unless ($working_patch =~ /^\s*$/s) {
-  run(["interdiff", $vc{patcharg}, $patch, '-'], '<', \$working_patch,
-                                                 '>', \$non_committed_patch,                    '2>', \$err) or die "$err\n";
+unless ($working_patch =~ /^(#[^\n]*|\s)*$/s) {
+  my ($f, $fn) = tempfile("commit-patch-workingpatch-XXXXXXXX", UNLINK=>0);
+  $clean{$fn} = undef;
+  print $f $working_patch;
+  close $f;
+  run(["interdiff", $vc{patcharg}, $patch, $fn], '>', \$non_committed_patch,                    '2>', \$err) or die "$err\n";
   run(["patch", $vc{patcharg}, "-R"], '<', \$working_patch,                         '>', \$out, '2>', \$err) or die "$out\n$err\n";
 }
 run(["patch", $vc{patcharg}], '<', $patch,                                          '>', \$out, '2>', \$err) or die "$out\n$err\n";
