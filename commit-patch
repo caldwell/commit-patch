@@ -257,7 +257,7 @@ END {
 
 =head1 NAME
 
-commit-patch - commit patches to I<Darcs>, I<Git>, I<Mercurial>, I<Bazaar>, I<Subversion>, or I<CVS> repositories
+commit-patch - commit patches to I<Darcs>, I<Git>, I<Mercurial>, I<Bazaar>, I<Monotone>, I<Subversion>, or I<CVS> repositories
 
 =head1 SYNOPSIS
 
@@ -283,7 +283,7 @@ B<vi>. Any files you specify will be passed to your version control's
 diff command.
 
 B<commit-patch> currently supports the following version control systems:
-B<I<Darcs>>, B<I<Git>>, B<I<Mercurial>>, B<I<Bazaar>>, B<I<Subversion>>, and B<I<CVS>>.
+B<I<Darcs>>, B<I<Git>>, B<I<Mercurial>>, B<I<Bazaar>>, B<I<Monotone>>, B<I<Subversion>>, and B<I<CVS>>.
 
 =head1 OPTIONS
 
