@@ -1,5 +1,6 @@
-commit-patch - commit patches to Darcs, Git, Mercurial, Bazaar, Subversion, CVS
--------------------------------------------------------------------------------
+commit-patch - commit patches to Darcs, Git, Mercurial,
+               Bazaar, Monotone, Subversion, or CVS
+-------------------------------------------------------
 
 PREREQUISITES
        commit-patch relies on several programs to get the job done:
@@ -14,6 +15,7 @@ PREREQUISITES
           git        - <http://git.or.cz/>
           mercurial  - <http://www.selenic.com/mercurial/>
           bazaar     - <http://bazaar-vcs.org/>
+          monotone   - <http://www.monotone.ca/>
           subversion - <http://subversion.tigris.org/>
           cvs        - <http://www.nongnu.org/cvs/>
 
