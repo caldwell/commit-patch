@@ -8,7 +8,7 @@ PREREQUISITES
           perl       - <http://www.perl.org>
           IPC::Run   - <http://search.cpan.org/dist/IPC-Run/>
           patch      - <http://www.gnu.org/software/patch/>
-          interdiff  - <http://cyberelk.net/tim/data/patchutils/>
+          interdiff  - <http://cyberelk.net/tim/software/patchutils/>
           cp         - Ideally installed on your system already. :-)
        and, of course, one of:
           darcs      - <http://darcs.net/>
