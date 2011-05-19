@@ -224,7 +224,7 @@ $SIG{PIPE} = $SIG{INT} = $SIG{QUIT} = sub { print "Cleanly aborting..\n"; };
 
 my ($out, $working_patch, $non_committed_patch);
 run([split(/ /,$vc{diff}),   @changed, @removed], '>', \$working_patch,                         '2>', \$err);# CVS diff dies. Sigh. or die "$err\n";
-unless ($working_patch =~ /^\s*$/s) {
+unless ($working_patch =~ /^\s*$/s) { # Work around an apparent bug in darcs (<http://bugs.darcs.net/issue2067>)
   run(["interdiff", $vc{patcharg}, $patch, '/dev/stdin'], '<', \$working_patch,
                                                  '>', \$non_committed_patch,                    '2>', \$err) or die "$err\n";
   run(["patch", $vc{patcharg}, "-R"], '<', \$working_patch,                         '>', \$out, '2>', \$err) or die "$out\n$err\n";
