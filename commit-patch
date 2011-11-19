@@ -39,87 +39,87 @@ my $amend;
 my %vc;
 while (!$vc{name}) {
     if (-d "$repo/CVS" && $repo eq '.') {
-        $vc{name}         = 'cvs';
-        $vc{diff}         = 'cvs diff -u';
-        $vc{commit}       = 'cvs commit';
-        $vc{message}      = sub { ('-m', $_[0]) };
-        $vc{message_file} = sub { ('-F', $_[0]) };
-        $vc{add}          = 'cvs add';
-        $vc{remove}       = 'cvs rm';
-        $vc{patcharg}     = '-p0';
-        $vc{lsdiffarg}    = [];
+        %vc = (name         => 'cvs',
+               diff         => 'cvs diff -u',
+               commit       => 'cvs commit',
+               message      => sub { ('-m', $_[0]) },
+               message_file => sub { ('-F', $_[0]) },
+               add          => 'cvs add',
+               remove       => 'cvs rm',
+               patcharg     => '-p0',
+               lsdiffarg    => []);
     } elsif (-d "$repo/.svn" && $repo eq '.') {
-        $vc{name}         = 'svn';
-        $vc{diff}         = 'svn diff -x -u';
-        $vc{commit}       = 'svn commit';
-        $vc{message}      = sub { ('-m', $_[0]) };
-        $vc{message_file} = sub { ('-F', $_[0]) };
-        $vc{add}          = 'svn add';
-        $vc{remove}       = 'svn delete';
-        $vc{patcharg}     = '-p0';
-        $vc{lsdiffarg}    = [];
+        %vc = (name         => 'svn',
+               diff         => 'svn diff -x -u',
+               commit       => 'svn commit',
+               message      => sub { ('-m', $_[0]) },
+               message_file => sub { ('-F', $_[0]) },
+               add          => 'svn add',
+               remove       => 'svn delete',
+               patcharg     => '-p0',
+               lsdiffarg    => []);
     } elsif (-d "$repo/_darcs") {
-        $vc{name}         = 'darcs';
-        $vc{diff}         = 'darcs diff -u';
-        $vc{add}          = 'darcs add';
-        $vc{remove}       = 'true';
-        $vc{commit}       = 'darcs record --all';
-        $vc{amend}        = 'darcs amend-record --all';
-        $vc{patcharg}     = '-p1';
-        $vc{lsdiffarg}    = [qw(--strip 1)];
-        $vc{message}      = sub {
-            return () if $amend; # Darcs amend doesn't have --logfile, so don't support comments on amend.
-            # Darcs doesn't like multiline -m comments so we have to put the log message into a file and use --logfile. Yuck.
-            #return ('-m', $_[0]);
-            my $message = $_[0];
-            $message .= "\n" unless $message =~ /\n$/s; # Darcs does screwey stuff when logfile has no trailing \n.
-            my ($message_file, $message_filename) = tempfile("commit-patch-message-XXXXXXXX", UNLINK=>0);
-            print $message_file $message;
-            close $message_file;
-            $clean{$message_filename} = undef; # make sure we delete this file on exit.
-            ("--logfile=$message_filename");
-        };
-        $vc{message_file} = sub { die "Darcs doesn't support --message-file and --amend" if $amend; ("--logfile=$_[0]" ) };
+        %vc = (name         => 'darcs',
+               diff         => 'darcs diff -u',
+               add          => 'darcs add',
+               remove       => 'true',
+               commit       => 'darcs record --all',
+               amend        => 'darcs amend-record --all',
+               patcharg     => '-p1',
+               lsdiffarg    => [qw(--strip 1)],
+               message      => sub {
+                   return () if $amend; # Darcs amend doesn't have --logfile, so don't support comments on amend.
+                   # Darcs doesn't like multiline -m comments so we have to put the log message into a file and use --logfile. Yuck.
+                   #return ('-m', $_[0]);
+                   my $message = $_[0];
+                   $message .= "\n" unless $message =~ /\n$/s; # Darcs does screwey stuff when logfile has no trailing \n.
+                   my ($message_file, $message_filename) = tempfile("commit-patch-message-XXXXXXXX", UNLINK=>0);
+                   print $message_file $message;
+                   close $message_file;
+                   $clean{$message_filename} = undef; # make sure we delete this file on exit.
+                   ("--logfile=$message_filename");
+               },
+               message_file => sub { die "Darcs doesn't support --message-file and --amend" if $amend; ("--logfile=$_[0]" ) });
     } elsif (-d "$repo/.hg") {
-        $vc{name}         = 'hg';
-        $vc{diff}         = 'hg diff';
-        $vc{commit}       = 'hg commit';
-        $vc{message}      = sub { ('-m', $_[0]) };
-        $vc{message_file} = sub { ('--logfile', $_[0]) };
-        $vc{add}          = 'hg addremove';
-        $vc{remove}       = 'true';
-        $vc{patcharg}     = '-p1';
-        $vc{lsdiffarg}    = [qw(--strip 1)];
+        %vc = (name         => 'hg',
+               diff         => 'hg diff',
+               commit       => 'hg commit',
+               message      => sub { ('-m', $_[0]) },
+               message_file => sub { ('--logfile', $_[0]) },
+               add          => 'hg addremove',
+               remove       => 'true',
+               patcharg     => '-p1',
+               lsdiffarg    => [qw(--strip 1)]);
     } elsif (-d "$repo/.bzr") {
-        $vc{name}         = 'bzr';
-        $vc{diff}         = 'bzr diff';
-        $vc{commit}       = 'bzr commit';
-        $vc{message}      = sub { ('-m', $_[0]) };
-        $vc{message_file} = sub { ('--file', $_[0]) };
-        $vc{add}          = 'bzr add';
-        $vc{remove}       = 'true';
-        $vc{patcharg}     = '-p0';
-        $vc{lsdiffarg}    = [];
+        %vc = (name         => 'bzr',
+               diff         => 'bzr diff',
+               commit       => 'bzr commit',
+               message      => sub { ('-m', $_[0]) },
+               message_file => sub { ('--file', $_[0]) },
+               add          => 'bzr add',
+               remove       => 'true',
+               patcharg     => '-p0',
+               lsdiffarg    => []);
         chdir $repo; # otherwise commit-partial from within a project subdir fails.
     } elsif (-d "$repo/.git") {
-        $vc{name}         = 'git';
-        $vc{diff}         = 'git diff';
-        $vc{commit}       = 'git commit';
-        $vc{amend}        = 'git commit --amend';
-        $vc{message}      = sub { ('-m', $_[0]) };
-        $vc{message_file} = sub { ('-F', $_[0]) };
-        $vc{previous_message} = sub { my $prev; run([qw(git log -1 --pretty=format:%s%n%b)], '>', \$prev); $prev };
+        %vc = (name         => 'git',
+               diff         => 'git diff',
+               commit       => 'git commit',
+               amend        => 'git commit --amend',
+               message      => sub { ('-m', $_[0]) },
+               message_file => sub { ('-F', $_[0]) },
+               previous_message => sub { my $prev; run([qw(git log -1 --pretty=format:%s%n%b)], '>', \$prev); $prev });
         # Git is special cased below.
     } elsif (-d "$repo/_MTN") {
-        $vc{name}         = 'mtn';
-        $vc{diff}         = 'mtn diff --without-header';
-        $vc{commit}       = 'mtn commit';
-        $vc{message}      = sub { ('-m', $_[0]) };
-        $vc{message_file} = sub { ('--message-file', $_[0]) };
-        $vc{add}          = 'mtn add';
-        $vc{remove}       = 'mtn drop';
-        $vc{patcharg}     = '-p0';
-        $vc{lsdiffarg}    = [];
+        %vc = (name         => 'mtn',
+               diff         => 'mtn diff --without-header',
+               commit       => 'mtn commit',
+               message      => sub { ('-m', $_[0]) },
+               message_file => sub { ('--message-file', $_[0]) },
+               add          => 'mtn add',
+               remove       => 'mtn drop',
+               patcharg     => '-p0',
+               lsdiffarg    => []);
     } else {
         $repo.="/..";
         printf("Trying back a dir: $repo, abs:%s\n", abs_path($repo));
