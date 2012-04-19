@@ -226,7 +226,7 @@ die "No files in patch" unless scalar %lsdiff;
 #print "Found $vc{name} in $repo\n";
 #printf("files: %s\n", join(",", @files));
 
-for my $f (@changed, @removed) {
+for my $f (@changed, @added, @removed) {
     run ["cp", "-f", $f, "$f.orig.$$"] or die "couldn't make backup of $f: $!" if -f $f;
     $clean{"$f.orig.$$"} = $f;
 }
