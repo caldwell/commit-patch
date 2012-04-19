@@ -48,7 +48,7 @@ while (!$vc{name}) {
                remove       => 'cvs rm',
                patcharg     => '-p0',
                lsdiffarg    => []);
-    } elsif (-d "$repo/.svn" && $repo eq '.') {
+    } elsif (-d "$repo/.svn") {
         %vc = (name         => 'svn',
                diff         => 'svn diff -x -u',
                commit       => 'svn commit',
