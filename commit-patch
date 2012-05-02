@@ -103,7 +103,7 @@ while (!$vc{name}) {
         chdir $repo; # otherwise commit-partial from within a project subdir fails.
     } elsif (-d "$repo/.git") {
         %vc = (name         => 'git',
-               diff         => 'git diff',
+               diff         => 'git diff --relative', # Use --relative here because "git diff | git apply --cached" fails to apply hunks from files not in your current dir tree
                commit       => 'git commit',
                amend        => 'git commit --amend',
                message      => sub { ('-m', $_[0]) },
