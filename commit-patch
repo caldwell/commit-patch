@@ -240,8 +240,8 @@ unless ($working_patch =~ /^\s*$/s) { # Work around an apparent bug in darcs (<h
   run(["patch", $vc{patcharg}, "-R"], '<', \$working_patch,                         '>', \$out, '2>', \$err) or die "$out\n$err\n";
 }
 run(["patch", $vc{patcharg}], '<', $patch,                                          '>', \$out, '2>', \$err) or die "$out\n$err\n";
-run([split(/ /,$vc{add}),    @added],                                               '>', \$out, '2>', \$err);# Expect these 2 to fail when
-run([split(/ /,$vc{remove}), @removed],                                             '>', \$out, '2>', \$err);# there are no new files.
+run([split(/ /,$vc{add}),    @added],                                               '>', \$out, '2>', \$err) if ($#added >= 0 );
+run([split(/ /,$vc{remove}), @removed],                                             '>', \$out, '2>', \$err) if ($#removed >= 0 );
 # Don't capture stdout or stderr because it can be interactive (cough cough darcs)
 run([split(/ /,$vc_commit), @message_opt, @added, @removed, @changed])                                       or die "commit failed.\n";
 run(["patch", $vc{patcharg}], '<', \$non_committed_patch,                           '>', \$out, '2>', \$err) or die "$out\n$err\n";
@@ -397,4 +397,3 @@ were causing problems with a repository that had a space in one of the
 directory names.
 
 =cut
-
