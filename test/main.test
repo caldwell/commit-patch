@@ -1,0 +1,23 @@
+# -*- sh -*-
+
+echo "initial" > a
+
+diff -uN --label /dev/null --label ${DIFF_PREFIX}a /dev/null a > initial.patch || true
+
+$COMMIT_PATCH -m "initial" initial.patch
+
+echo "1234" >> a
+
+$VC_DIFF > changed.patch || true
+
+$COMMIT_PATCH -m "changed" changed.patch
+
+rm a
+
+# Some VCSes won't show diffs for removed files unless you tell it they are removed:
+[ $VC == 'cvs' ] && cvs rm a
+[ $VC == 'hg'  ] && hg rm a
+
+$VC_DIFF > removed.patch || true
+
+$COMMIT_PATCH -m "removed" removed.patch

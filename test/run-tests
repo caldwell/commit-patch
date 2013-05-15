@@ -1,0 +1,50 @@
+#!/bin/bash
+
+set -x
+TESTDIR=$(dirname $0)
+TESTDIR_ABS=$(cd $TESTDIR && pwd)
+export COMMIT_PATCH="$TESTDIR_ABS/../commit-patch --verbose"
+
+VCSes=$((cd "$TESTDIR/vcs" && ls -1 *.sh) | sed -e 's/\(.*\)\.sh/\1/')
+Tests=$(cd "$TESTDIR" && ls -1 *.test)
+
+usage () {
+    set +x
+    echo "Usage:"
+    echo "    $0 <VC>"
+    echo ""
+    echo "  Where <VC> is one of: $(echo $VCSes)"
+    exit 1;
+}
+
+VCs=${1:-$VCSes}
+
+[ "$VCs" == "--help" -o "$VCs" == "-h" ] && usage
+
+for vc in "$TESTDIR/vcs/"*.sh; do
+    source "$vc"
+done
+
+run_test () {
+    export VC=$1
+    TEST=$2
+
+    [ -d "$TESTDIR/tmp" ] || mkdir "$TESTDIR/tmp"
+    WD=$(mktemp -d "$TESTDIR_ABS/tmp/wd.XXXXXXX")
+    REPO=$(mktemp -d "$TESTDIR_ABS/tmp/repo.XXXXXXX")
+
+    ${VC}_init "$WD" "$REPO"
+
+    if ! (cd "$WD" && sh -x -e "$TESTDIR_ABS/$TEST"); then
+        echo "$VC / $TEST: Test failed."
+        exit 1;
+    fi
+
+#    ${VC}_cleanup "$WD" "$REPO"
+}
+
+for vc in $VCs; do
+    for t in $Tests; do
+        run_test $vc $t
+    done
+done
