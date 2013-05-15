@@ -40,7 +40,7 @@ my %vc;
 while (!$vc{name}) {
     if (-d "$repo/CVS" && $repo eq '.') {
         %vc = (name         => 'cvs',
-               diff         => 'cvs diff -u',
+               diff         => 'cvs diff -Nu',
                commit       => 'cvs commit',
                message      => sub { ('-m', $_[0]) },
                message_file => sub { ('-F', $_[0]) },
