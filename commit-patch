@@ -229,6 +229,7 @@ die "No files in patch" unless scalar %lsdiff;
 for my $f (@changed, @added, @removed) {
     run ["cp", "-f", $f, "$f.orig.$$"] or die "couldn't make backup of $f: $!" if -f $f;
     $clean{"$f.orig.$$"} = $f;
+    unlink $f if grep { $_ eq $f } @added; # Needs to be gone so patch can create it
 }
 $SIG{PIPE} = $SIG{INT} = $SIG{QUIT} = sub { print "Cleanly aborting..\n"; };
 
