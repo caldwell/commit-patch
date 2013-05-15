@@ -237,7 +237,7 @@ run([split(/ /,$vc{diff}),   @changed, @removed], '>', \$working_patch,         
 unless ($working_patch =~ /^\s*$/s) { # Work around an apparent bug in darcs (<http://bugs.darcs.net/issue2067>)
   run(["interdiff", $vc{patcharg}, $patch, '/dev/stdin'], '<', \$working_patch,
                                                           '>', \$non_committed_patch,           '2>', \$err) or die "$err\n";
-  run(["patch", $vc{patcharg}, "-R"], '<', \$working_patch,                         '>', \$out, '2>', \$err) or die "$out\n$err\n";
+  run([qw"patch -R --force", $vc{patcharg}], '<', \$working_patch,                  '>', \$out, '2>', \$err) or die "$out\n$err\n";
 }
 run(["patch", $vc{patcharg}], '<', $patch,                                          '>', \$out, '2>', \$err) or die "patch: $out\n$err\n";
 run([split(/ /,$vc{add}),    @added],                                               '>', \$out, '2>', \$err) or die "$vc{add}: $out\n$err\n" if @added;
