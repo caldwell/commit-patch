@@ -16,7 +16,7 @@ my ($dry_run, $verbose);
 sub run {
     if ($verbose || $dry_run) {
         for (@_) {
-            print join ' ', @$_ if ref $_ eq 'ARRAY';
+            print join ' ', map { $_ =~ / / ? "\"$_\"" : $_ } @$_ if ref $_ eq 'ARRAY';
             print " $_ " if ref $_ eq '';
             print '[',ref $_,'] ' if ref $_ ne 'ARRAY' && ref $_ ne '';
         }
