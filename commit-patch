@@ -239,12 +239,12 @@ unless ($working_patch =~ /^\s*$/s) { # Work around an apparent bug in darcs (<h
                                                  '>', \$non_committed_patch,                    '2>', \$err) or die "$err\n";
   run(["patch", $vc{patcharg}, "-R"], '<', \$working_patch,                         '>', \$out, '2>', \$err) or die "$out\n$err\n";
 }
-run(["patch", $vc{patcharg}], '<', $patch,                                          '>', \$out, '2>', \$err) or die "$out\n$err\n";
-run([split(/ /,$vc{add}),    @added],                                               '>', \$out, '2>', \$err) if @added;
-run([split(/ /,$vc{remove}), @removed],                                             '>', \$out, '2>', \$err) if @removed;
+run(["patch", $vc{patcharg}], '<', $patch,                                          '>', \$out, '2>', \$err) or die "patch: $out\n$err\n";
+run([split(/ /,$vc{add}),    @added],                                               '>', \$out, '2>', \$err) or die "$vc{add}: $out\n$err\n" if @added;
+run([split(/ /,$vc{remove}), @removed],                                             '>', \$out, '2>', \$err) or die "$vc{remove}: $out\n$err\n" if @removed;
 # Don't capture stdout or stderr because it can be interactive (cough cough darcs)
 run([split(/ /,$vc_commit), @message_opt, @added, @removed, @changed])                                       or die "commit failed.\n";
-run(["patch", $vc{patcharg}], '<', \$non_committed_patch,                           '>', \$out, '2>', \$err) or die "$out\n$err\n";
+run(["patch", $vc{patcharg}], '<', \$non_committed_patch,                           '>', \$out, '2>', \$err) or die "patch: $out\n$err\n";
 
 END {
     return if $dry_run;
