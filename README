@@ -25,6 +25,10 @@ PREREQUISITES
        On Fedora:
          yum install perl-IPC-Run patch patchutils
 
+       On Mac OS X w/ Homebrew <http://mxcl.github.io/homebrew/>
+         brew install patchutils
+         cpan -i IPC::Run
+
        commit-patch is known to run on Linux and Mac OS X. It is perl,
        so ideally it will run anywhere, but we have never tested in
        other environments, most notably Windows. Use at your own risk.
