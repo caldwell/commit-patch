@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 set -x
 TESTDIR=$(dirname $0)
 TESTDIR_ABS=$(cd $TESTDIR && pwd)
