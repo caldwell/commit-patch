@@ -22,6 +22,7 @@ FLAGS="${SITEFLAG} -q -batch -l path.el -f batch-byte-compile"
 
 ELDIR=/usr/share/emacs/site-lisp/${PACKAGE}
 ELCDIR=/usr/share/${FLAVOR}/site-lisp/${PACKAGE}
+ELRELDIR=../../../emacs/site-lisp/${PACKAGE}
 
 # Install-info-altdir does not actually exist.
 # Maybe somebody will write it.
@@ -33,13 +34,14 @@ fi
 install -m 755 -d ${ELCDIR}
 cd ${ELDIR}
 FILES=`echo *.el`
-cp ${FILES} ${ELCDIR}
 cd ${ELCDIR}
+ln -sf ${ELRELDIR}/*.el .
 
 cat << EOF > path.el
-(setq load-path (cons "." load-path) byte-compile-warnings nil)
+(debian-pkg-add-load-path-item ".")
+(setq byte-compile-warnings nil)
 EOF
 ${FLAVOR} ${FLAGS} ${FILES}
-rm -f *.el path.el
+rm -f path.el
 
 exit 0
