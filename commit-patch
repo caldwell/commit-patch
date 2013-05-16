@@ -112,7 +112,7 @@ while (!$vc{name}) {
         # Git is special cased below.
     } elsif (-d "$repo/_MTN") {
         %vc = (name         => 'mtn',
-               diff         => 'mtn diff --without-header',
+               diff         => 'mtn automate content_diff',
                commit       => 'mtn commit',
                message      => sub { ('-m', $_[0]) },
                message_file => sub { ('--message-file', $_[0]) },
