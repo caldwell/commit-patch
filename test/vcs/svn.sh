@@ -13,8 +13,5 @@ svn_init () {
 }
 
 svn_cleanup () {
-    WD=$1
-    REPO=$2
-    rm -rf "$WD"
-    rm -rf "$REPO"
+    true
 }

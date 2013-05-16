@@ -9,6 +9,5 @@ bzr_init () {
 }
 
 bzr_cleanup () {
-    WD=$1
-    rm -rf "$WD"
+    true
 }

@@ -48,7 +48,9 @@ run_test () {
         exit 1;
     fi
 
-#    ${VC}_cleanup "$WD" "$REPO"
+    ${VC}_cleanup "$WD" "$REPO"
+    rm -rf "$WD"
+    rm -rf "$REPO"
 }
 
 for vc in $VCs; do

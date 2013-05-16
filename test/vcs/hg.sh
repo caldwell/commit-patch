@@ -9,6 +9,5 @@ hg_init () {
 }
 
 hg_cleanup () {
-    WD=$1
-    rm -rf "$WD"
+    true
 }

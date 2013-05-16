@@ -13,8 +13,5 @@ cvs_init () {
 }
 
 cvs_cleanup () {
-    WD=$1
-    REPO=$2
-    rm -rf "$WD"
-    rm -rf "$REPO"
+    true
 }

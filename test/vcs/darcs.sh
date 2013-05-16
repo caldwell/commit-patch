@@ -9,6 +9,5 @@ darcs_init () {
 }
 
 darcs_cleanup () {
-    WD=$1
-    rm -rf "$WD"
+    true
 }

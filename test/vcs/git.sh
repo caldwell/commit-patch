@@ -9,6 +9,5 @@ git_init () {
 }
 
 git_cleanup () {
-    WD=$1
-    rm -rf "$WD"
+    true
 }

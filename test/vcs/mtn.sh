@@ -17,9 +17,5 @@ mtn_init () {
 }
 
 mtn_cleanup () {
-    WD=$1
-    REPO=$2
-    rm -rf "$REPO"
-    rm -rf "$WD"
     rm -rf "$MTN_KEYDIR"
 }
