@@ -28,6 +28,10 @@ commit-patch-$(VERSION).tar.gz: $(ALL) Makefile
 	tar czf commit-patch-$(VERSION).tar.gz commit-patch-$(VERSION)
 	rm -rf commit-patch-$(VERSION)
 
+test:
+	./test/run-tests
+.PHONY: test
+
 PREFIX=/usr/local
 install: $(ALL)
 	mkdir -p "$(PREFIX)/bin"
