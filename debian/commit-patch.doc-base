@@ -1,0 +1,12 @@
+Document: commit-patch
+Title: Debian commit-patch Manual
+Author: David Caldwell <david@porkrind.org>
+Abstract: This manual describes what commit-patch is
+ and how it can be used to commit patches to Darcs, Git,
+ Mercurial, Bazaar, Monotone, Subversion, or CVS repositories.
+Section: Programming
+
+Format: HTML
+Index: /usr/share/doc/commit-patch/commit-patch.html
+Files: /usr/share/doc/commit-patch/commit-patch.html
+
