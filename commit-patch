@@ -1,9 +1,9 @@
 #!/usr/bin/perl -w
-# Copyright (c) 2003-2010 David Caldwell <david@porkrind.org>
+# Copyright (c) 2003-2013 David Caldwell <david@porkrind.org>
 #                     and Jim Radford <radford@bleackbean.org>, All Rights Reserved.
-# This code can be distributed under the terms of the GNU Public License
+# This code can be distributed under the terms of the GNU Public License (Version 2 or greater).
 
-my $VERSION = '2.4';
+my $VERSION = '2.5';
 
 use strict;
 use Cwd qw(abs_path);
@@ -16,7 +16,7 @@ my ($dry_run, $verbose);
 sub run {
     if ($verbose || $dry_run) {
         for (@_) {
-            print join ' ', @$_ if ref $_ eq 'ARRAY';
+            print join ' ', map { $_ =~ / / ? "\"$_\"" : $_ } @$_ if ref $_ eq 'ARRAY';
             print " $_ " if ref $_ eq '';
             print '[',ref $_,'] ' if ref $_ ne 'ARRAY' && ref $_ ne '';
         }
@@ -39,77 +39,87 @@ my $amend;
 my %vc;
 while (!$vc{name}) {
     if (-d "$repo/CVS" && $repo eq '.') {
-        $vc{name}         = 'cvs';
-        $vc{diff}         = 'cvs diff -u';
-        $vc{commit}       = 'cvs commit';
-        $vc{message}      = sub { ('-m', $_[0]) };
-        $vc{message_file} = sub { ('-F', $_[0]) };
-        $vc{add}          = 'cvs add';
-        $vc{remove}       = 'cvs rm';
-        $vc{patcharg}     = '-p0';
-        $vc{lsdiffarg}    = [];
-    } elsif (-d "$repo/.svn" && $repo eq '.') {
-        $vc{name}         = 'svn';
-        $vc{diff}         = 'svn diff -x -u';
-        $vc{commit}       = 'svn commit';
-        $vc{message}      = sub { ('-m', $_[0]) };
-        $vc{message_file} = sub { ('-F', $_[0]) };
-        $vc{add}          = 'svn add';
-        $vc{remove}       = 'svn delete';
-        $vc{patcharg}     = '-p0';
-        $vc{lsdiffarg}    = [];
+        %vc = (name         => 'cvs',
+               diff         => 'cvs diff -Nu',
+               commit       => 'cvs commit',
+               message      => sub { ('-m', $_[0]) },
+               message_file => sub { ('-F', $_[0]) },
+               add          => 'cvs add',
+               remove       => 'cvs rm',
+               patcharg     => '-p0',
+               lsdiffarg    => []);
+    } elsif (-d "$repo/.svn") {
+        %vc = (name         => 'svn',
+               diff         => 'svn diff -x -u',
+               commit       => 'svn commit',
+               message      => sub { ('-m', $_[0]) },
+               message_file => sub { ('-F', $_[0]) },
+               add          => 'svn add',
+               remove       => 'svn delete',
+               patcharg     => '-p0',
+               lsdiffarg    => []);
     } elsif (-d "$repo/_darcs") {
-        $vc{name}         = 'darcs';
-        $vc{diff}         = 'darcs diff -u';
-        $vc{add}          = 'darcs add';
-        $vc{remove}       = 'true';
-        $vc{commit}       = 'darcs record --all';
-        $vc{amend}        = 'darcs amend-record --all';
-        $vc{patcharg}     = '-p1';
-        $vc{lsdiffarg}    = [qw(--strip 1)];
-        $vc{message}      = sub {
-            return () if $amend; # Darcs amend doesn't have --logfile, so don't support comments on amend.
-            # Darcs doesn't like multiline -m comments so we have to put the log message into a file and use --logfile. Yuck.
-            #return ('-m', $_[0]);
-            my $message = $_[0];
-            $message .= "\n" unless $message =~ /\n$/s; # Darcs does screwey stuff when logfile has no trailing \n.
-            my ($message_file, $message_filename) = tempfile("commit-patch-message-XXXXXXXX", UNLINK=>0);
-            print $message_file $message;
-            close $message_file;
-            $clean{$message_filename} = undef; # make sure we delete this file on exit.
-            ("--logfile=$message_filename");
-        };
-        $vc{message_file} = sub { die "Darcs doesn't support --message-file and --amend" if $amend; ("--logfile=$_[0]" ) };
+        %vc = (name         => 'darcs',
+               diff         => 'darcs diff -u',
+               add          => 'darcs add',
+               remove       => 'true',
+               commit       => 'darcs record --all',
+               amend        => 'darcs amend-record --all',
+               patcharg     => '-p1',
+               lsdiffarg    => [qw(--strip 1)],
+               message      => sub {
+                   return () if $amend; # Darcs amend doesn't have --logfile, so don't support comments on amend.
+                   # Darcs doesn't like multiline -m comments so we have to put the log message into a file and use --logfile. Yuck.
+                   #return ('-m', $_[0]);
+                   my $message = $_[0];
+                   $message .= "\n" unless $message =~ /\n$/s; # Darcs does screwey stuff when logfile has no trailing \n.
+                   my ($message_file, $message_filename) = tempfile("commit-patch-message-XXXXXXXX", UNLINK=>0);
+                   print $message_file $message;
+                   close $message_file;
+                   $clean{$message_filename} = undef; # make sure we delete this file on exit.
+                   ("--logfile=$message_filename");
+               },
+               message_file => sub { die "Darcs doesn't support --message-file and --amend" if $amend; ("--logfile=$_[0]" ) });
     } elsif (-d "$repo/.hg") {
-        $vc{name}         = 'hg';
-        $vc{diff}         = 'hg diff';
-        $vc{commit}       = 'hg commit';
-        $vc{message}      = sub { ('-m', $_[0]) };
-        $vc{message_file} = sub { ('--logfile', $_[0]) };
-        $vc{add}          = 'hg addremove';
-        $vc{remove}       = 'true';
-        $vc{patcharg}     = '-p1';
-        $vc{lsdiffarg}    = [qw(--strip 1)];
+        %vc = (name         => 'hg',
+               diff         => 'hg diff',
+               commit       => 'hg commit',
+               message      => sub { ('-m', $_[0]) },
+               message_file => sub { ('--logfile', $_[0]) },
+               add          => 'hg addremove',
+               remove       => 'true',
+               patcharg     => '-p1',
+               lsdiffarg    => [qw(--strip 1)]);
     } elsif (-d "$repo/.bzr") {
-        $vc{name}         = 'bzr';
-        $vc{diff}         = 'bzr diff';
-        $vc{commit}       = 'bzr commit';
-        $vc{message}      = sub { ('-m', $_[0]) };
-        $vc{message_file} = sub { ('--file', $_[0]) };
-        $vc{add}          = 'bzr add';
-        $vc{remove}       = 'true';
-        $vc{patcharg}     = '-p0';
-        $vc{lsdiffarg}    = [];
+        %vc = (name         => 'bzr',
+               diff         => 'bzr diff',
+               commit       => 'bzr commit',
+               message      => sub { ('-m', $_[0]) },
+               message_file => sub { ('--file', $_[0]) },
+               add          => 'bzr add',
+               remove       => 'true',
+               patcharg     => '-p0',
+               lsdiffarg    => []);
         chdir $repo; # otherwise commit-partial from within a project subdir fails.
     } elsif (-d "$repo/.git") {
-        $vc{name}         = 'git';
-        $vc{diff}         = 'git diff';
-        $vc{commit}       = 'git commit';
-        $vc{amend}        = 'git commit --amend';
-        $vc{message}      = sub { ('-m', $_[0]) };
-        $vc{message_file} = sub { ('-F', $_[0]) };
-        $vc{previous_message} = sub { my $prev; run([qw(git log -1 --pretty=format:%s%n%b)], '>', \$prev); $prev };
+        %vc = (name         => 'git',
+               diff         => 'git diff --relative', # Use --relative here because "git diff | git apply --cached" fails to apply hunks from files not in your current dir tree
+               commit       => 'git commit',
+               amend        => 'git commit --amend',
+               message      => sub { ('-m', $_[0]) },
+               message_file => sub { ('-F', $_[0]) },
+               previous_message => sub { my $prev; run([qw(git log -1 --pretty=format:%s%n%b)], '>', \$prev); $prev });
         # Git is special cased below.
+    } elsif (-d "$repo/_MTN") {
+        %vc = (name         => 'mtn',
+               diff         => 'mtn automate content_diff',
+               commit       => 'mtn commit',
+               message      => sub { ('-m', $_[0]) },
+               message_file => sub { ('--message-file', $_[0]) },
+               add          => 'mtn add',
+               remove       => 'mtn drop',
+               patcharg     => '-p0',
+               lsdiffarg    => []);
     } else {
         $repo.="/..";
         printf("Trying back a dir: $repo, abs:%s\n", abs_path($repo));
@@ -206,31 +216,36 @@ if ($vc{name} eq 'git') {
 }
 
 my ($lsdiff_out, $err);
-run ["lsdiff", @{$vc{lsdiffarg}}, $patch], '|', ["sort"], '|', ["uniq"], \$lsdiff_out, \$err or die "lsdiff|sort|unique : $! ($err)";
-my @files = split(/\n/, $lsdiff_out);
-die "No files in patch" unless scalar @files;
+run ["lsdiff", '-s', @{$vc{lsdiffarg}}, $patch], '>', \$lsdiff_out, '2>', \$err or die "lsdiff -s: $! ($err)";
+my %lsdiff = map { /^([-+!])\s+(.*)$/ or die "bad lsdiff line: $_\nOut:\n$lsdiff_out"; ( $2 => $1 ) } split(/\n/, $lsdiff_out);
+my @added   = grep { $lsdiff{$_} eq '+' } keys %lsdiff;
+my @removed = grep { $lsdiff{$_} eq '-' } keys %lsdiff;
+my @changed = grep { $lsdiff{$_} eq '!' } keys %lsdiff;
+die "No files in patch" unless scalar %lsdiff;
 
 #print "Found $vc{name} in $repo\n";
 #printf("files: %s\n", join(",", @files));
 
-for my $f (@files) {
+for my $f (@changed, @added, @removed) {
     run ["cp", "-f", $f, "$f.orig.$$"] or die "couldn't make backup of $f: $!" if -f $f;
     $clean{"$f.orig.$$"} = $f;
+    unlink $f if grep { $_ eq $f } @added; # Needs to be gone so patch can create it
 }
 $SIG{PIPE} = $SIG{INT} = $SIG{QUIT} = sub { print "Cleanly aborting..\n"; };
 
-$clean{"working.patch.$$"} = $clean{"non_committed.patch.$$"} = undef;
-
-my ($out,$non_committed_patch);
-run([split(/ /,$vc{add}),    @files],                                               '>', \$out, '2>', \$err);# Expect these 2 to fail when
-run([split(/ /,$vc{remove}), @files],                                               '>', \$out, '2>', \$err);# there are no new files.
-run([split(/ /,$vc{diff}),   @files], '>', "working.patch.$$",                                  '2>', \$err);# CVS diff dies. Sigh. or die "$err\n";
-run(["interdiff", $vc{patcharg}, $patch, "working.patch.$$"], '>', "non_committed.patch.$$",    '2>', \$err) or die "$err\n";
-run(["patch", $vc{patcharg}, "-R"], '<', "working.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
-run(["patch", $vc{patcharg}], '<', $patch,                                          '>', \$out, '2>', \$err) or die "$out\n$err\n";
+my ($out, $working_patch, $non_committed_patch);
+run([split(/ /,$vc{diff}),   @changed, @removed], '>', \$working_patch,                         '2>', \$err);# CVS diff dies. Sigh. or die "$err\n";
+unless ($working_patch =~ /^\s*$/s) { # Work around an apparent bug in darcs (<http://bugs.darcs.net/issue2067>)
+  run(["interdiff", $vc{patcharg}, $patch, '/dev/stdin'], '<', \$working_patch,
+                                                          '>', \$non_committed_patch,           '2>', \$err) or die "$err\n";
+  run([qw"patch -R --force", $vc{patcharg}], '<', \$working_patch,                  '>', \$out, '2>', \$err) or die "$out\n$err\n";
+}
+run(["patch", $vc{patcharg}], '<', $patch,                                          '>', \$out, '2>', \$err) or die "patch: $out\n$err\n";
+run([split(/ /,$vc{add}),    @added],                                               '>', \$out, '2>', \$err) or die "$vc{add}: $out\n$err\n" if @added;
+run([split(/ /,$vc{remove}), @removed],                                             '>', \$out, '2>', \$err) or die "$vc{remove}: $out\n$err\n" if @removed;
 # Don't capture stdout or stderr because it can be interactive (cough cough darcs)
-run([split(/ /,$vc_commit), @message_opt,                                               @files],debug => 0) or die "commit failed.\n";
-run(["patch", $vc{patcharg}], '<', "non_committed.patch.$$",                        '>', \$out, '2>', \$err) or die "$out\n$err\n";
+run([split(/ /,$vc_commit), @message_opt, @added, @removed, @changed])                                       or die "commit failed.\n";
+run(["patch", $vc{patcharg}], '<', \$non_committed_patch,                           '>', \$out, '2>', \$err) or die "patch: $out\n$err\n";
 
 END {
     return if $dry_run;
@@ -243,7 +258,7 @@ END {
 
 =head1 NAME
 
-commit-patch - commit patches to I<Darcs>, I<Git>, I<Mercurial>, I<Bazaar>, I<Subversion>, or I<CVS> repositories
+commit-patch - commit patches to I<Darcs>, I<Git>, I<Mercurial>, I<Bazaar>, I<Monotone>, I<Subversion>, or I<CVS> repositories
 
 =head1 SYNOPSIS
 
@@ -269,7 +284,7 @@ B<vi>. Any files you specify will be passed to your version control's
 diff command.
 
 B<commit-patch> currently supports the following version control systems:
-B<I<Darcs>>, B<I<Git>>, B<I<Mercurial>>, B<I<Bazaar>>, B<I<Subversion>>, and B<I<CVS>>.
+B<I<Darcs>>, B<I<Git>>, B<I<Mercurial>>, B<I<Bazaar>>, B<I<Monotone>>, B<I<Subversion>>, and B<I<CVS>>.
 
 =head1 OPTIONS
 
@@ -366,7 +381,7 @@ Jim Radford <radford@blackbean.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2003-2010 by David Caldwell and Jim Radford.
+Copyright 2003-2013 by David Caldwell and Jim Radford.
 
 B<commit-patch> is distributed under the GNU General Public
 License. See the COPYING file in the distribution for more details.
@@ -383,4 +398,3 @@ were causing problems with a repository that had a space in one of the
 directory names.
 
 =cut
-

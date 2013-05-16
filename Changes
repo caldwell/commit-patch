@@ -1,3 +1,18 @@
+commit-patch (2.5)
+
+  * Added Monotone support.
+
+  * Support Subversion version 1.7.
+
+  * Fixed an issue with git where committing inside a repository's
+    subdirectory would fail.
+
+  * Fixed some cases where adding and removing files would fail.
+
+  * Added a small, poor testing infrastructure.
+
+ -- David Caldwell <david@porkrind.org>  Wed, 15 May 2013 19:34:42 -0700
+
 commit-patch (2.4)
 
   * Added --retry option to commit-partial for retrying failed patches.

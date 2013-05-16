@@ -1,5 +1,6 @@
-commit-patch - commit patches to Darcs, Git, Mercurial, Bazaar, Subversion, CVS
--------------------------------------------------------------------------------
+commit-patch - commit patches to Darcs, Git, Mercurial,
+               Bazaar, Monotone, Subversion, or CVS
+-------------------------------------------------------
 
 PREREQUISITES
        commit-patch relies on several programs to get the job done:
@@ -7,13 +8,14 @@ PREREQUISITES
           perl       - <http://www.perl.org>
           IPC::Run   - <http://search.cpan.org/dist/IPC-Run/>
           patch      - <http://www.gnu.org/software/patch/>
-          interdiff  - <http://cyberelk.net/tim/data/patchutils/>
+          interdiff  - <http://cyberelk.net/tim/software/patchutils/>
           cp         - Ideally installed on your system already. :-)
        and, of course, one of:
           darcs      - <http://darcs.net/>
           git        - <http://git.or.cz/>
           mercurial  - <http://www.selenic.com/mercurial/>
           bazaar     - <http://bazaar-vcs.org/>
+          monotone   - <http://www.monotone.ca/>
           subversion - <http://subversion.tigris.org/>
           cvs        - <http://www.nongnu.org/cvs/>
 
@@ -22,6 +24,10 @@ PREREQUISITES
 
        On Fedora:
          yum install perl-IPC-Run patch patchutils
+
+       On Mac OS X w/ Homebrew <http://mxcl.github.io/homebrew/>
+         brew install patchutils
+         cpan -i IPC::Run
 
        commit-patch is known to run on Linux and Mac OS X. It is perl,
        so ideally it will run anywhere, but we have never tested in
@@ -51,7 +57,7 @@ AUTHORS
        o   Jim Radford <radford@blackbean.org>
 
 COPYRIGHT AND LICENSE
-       Copyright 2003-2010 by David Caldwell and Jim Radford.
+       Copyright 2003-2013 by David Caldwell and Jim Radford.
 
        commit-patch is distributed under the GNU General Public
        License. See the COPYING file in the distribution for more

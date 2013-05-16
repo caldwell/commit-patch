@@ -1,7 +1,31 @@
-;; Copyright 2003-2010 Jim Radford <radford@bleackbean.org>
+;;; commit-patch-buffer.el --- commit patches to Darcs, Git, Mercurial, Bazaar, Monotone, Subversion, or CVS repositories
+
+;; Copyright 2003-2013 Jim Radford <radford@bleackbean.org>
 ;;                 and David Caldwell <david@porkrind.org>, All Rights Reserved.
-;; This code can be distributed under the terms of the GNU Public License
-;; Version: 2.1
+;; This code can be distributed under the terms of the GNU Public License (Version 2 or greater).
+;;
+;; Version: 2.5
+;;
+;; Author: Jim Radford <radford@blackbean.org>
+;;         David Caldwell <david@porkrind.org>
+
+;;; Commentary:
+
+;; commit-patch-buffer provides an Emacs front end to the commit-patch(1)
+;; program. Typically the patch to commit would be obtained with vc-diff
+;; ("C-c v ="), though any Emacs diff-mode buffer can be committed.
+;;
+;; Typing "C-c C-c" in a diff-mode buffer kicks off the process and brings
+;; up a buffer for the commit comment. After entering a suitable comment,
+;; type "C-c C-c" again to finish the commit. If commit-patch-buffer cannot
+;; automatically detect the repository directory, it will ask for it
+;; interactively.
+;;
+;; commit-patch-buffer-in-directory is also available: this function skips
+;; the automagical repository detection logic if the user wants to directly
+;; specify the buffer to commit and directory.
+
+;;; Code:
 
 (require 'vc)
 (require 'log-edit)
@@ -96,3 +120,5 @@ following algorithm:
   (define-key diff-mode-map "\C-xvv" 'commit-patch-buffer)))
 
 (provide 'commit-patch-buffer)
+
+;;; commit-patch-buffer.el ends here
