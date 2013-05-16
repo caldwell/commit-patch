@@ -18,6 +18,7 @@ rm a
 [ $VC == 'cvs' ] && cvs rm a
 [ $VC == 'hg'  ] && hg rm a
 [ $VC == 'mtn' ] && mtn drop a
+[ $VC == 'svn' ] && svn rm a
 
 $VC_DIFF > removed.patch || true
 
