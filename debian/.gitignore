@@ -1,0 +1,5 @@
+commit-patch/
+files
+*.log
+*.debhelper
+*.substvars
