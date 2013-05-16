@@ -13,6 +13,8 @@ commit-patch (2.5-1) unstable; urgency=low
 
   * Upgraded to standards version 3.9.4.
 
+  * Updated emacsen-install debhelper script (Closes: #703583)
+
  -- David Caldwell <david@porkrind.org>  Wed, 15 May 2013 20:44:57 -0700
 
 commit-patch (2.4-1) unstable; urgency=low
