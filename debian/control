@@ -3,8 +3,9 @@ Section: vcs
 Priority: optional
 Maintainer: David Caldwell <david@porkrind.org>
 Build-Depends: debhelper (>= 8.0.0~), perl
-Standards-Version: 3.9.1
+Standards-Version: 3.9.4
 Homepage: http://porkrind.org/commit-patch/
+Vcs-Git: git://github.com/caldwell/commit-patch.git -b debian
 
 Package: commit-patch
 Architecture: all
