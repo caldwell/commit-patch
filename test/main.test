@@ -17,6 +17,7 @@ rm a
 # Some VCSes won't show diffs for removed files unless you tell it they are removed:
 [ $VC == 'cvs' ] && cvs rm a
 [ $VC == 'hg'  ] && hg rm a
+[ $VC == 'mtn' ] && mtn drop a
 
 $VC_DIFF > removed.patch || true
 
