@@ -1,9 +1,11 @@
 Description: Fix elisp install location
 Author: David Caldwell <david@porkrind.org>
 
---- commit-patch-2.3.orig/Makefile
-+++ commit-patch-2.3/Makefile
-@@ -32,9 +32,9 @@ PREFIX=/usr/local
+Index: commit-patch/Makefile
+===================================================================
+--- commit-patch.orig/Makefile	2013-05-15 20:43:23.000000000 -0700
++++ commit-patch/Makefile	2013-05-15 20:43:23.000000000 -0700
+@@ -36,9 +36,9 @@
  install: $(ALL)
  	mkdir -p "$(PREFIX)/bin"
  	mkdir -p "$(PREFIX)/share/man/man1"
