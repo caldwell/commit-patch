@@ -4,6 +4,7 @@ git_init () {
     (cd "$WD" && git init)
 
     export VC_DIFF="git diff"
+    export VC_RM="true"
     export DIFF_PREFIX="b/"
 }
 

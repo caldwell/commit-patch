@@ -8,6 +8,7 @@ svn_init () {
     svn checkout file://"$REPO"/test/trunk "$WD"
 
     export VC_DIFF="svn diff"
+    export VC_RM="svn rm"
     export DIFF_PREFIX=""
 }
 

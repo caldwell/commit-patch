@@ -8,6 +8,7 @@ cvs_init () {
     cvs checkout -d "$WD" test
 
     export VC_DIFF="cvs diff -N"
+    export VC_RM="cvs rm"
     export DIFF_PREFIX=""
 }
 

@@ -4,6 +4,7 @@ bzr_init () {
     (cd "$WD" && bzr init)
 
     export VC_DIFF="bzr diff"
+    export VC_RM="true"
     export DIFF_PREFIX=""
 }
 

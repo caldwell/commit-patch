@@ -4,6 +4,7 @@ darcs_init () {
     (cd "$WD" && darcs init)
 
     export VC_DIFF="darcs diff"
+    export VC_RM="true"
     export DIFF_PREFIX="a/"
 }
 

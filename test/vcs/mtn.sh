@@ -12,6 +12,7 @@ mtn_init () {
     (cd "$WD" && mtn automate generate_key commit-patch-automated-tester@example.com '')
 
     export VC_DIFF="mtn diff --without-header"
+    export VC_RM="mtn drop"
     export DIFF_PREFIX=""
 }
 
