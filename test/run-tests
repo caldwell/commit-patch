@@ -1,10 +1,17 @@
 #!/bin/bash
 
 set -e
-set -x
+
+if [ "$1" == "-v" -o "$1" == "--verbose" ]; then
+    shift
+    set -x
+    export V=--verbose
+    export V_SH=-x
+fi
+
 TESTDIR=$(dirname $0)
 TESTDIR_ABS=$(cd $TESTDIR && pwd)
-export COMMIT_PATCH="$TESTDIR_ABS/../commit-patch --verbose"
+export COMMIT_PATCH="$TESTDIR_ABS/../commit-patch $V"
 
 VCSes=$((cd "$TESTDIR/vcs" && ls -1 *.sh) | sed -e 's/\(.*\)\.sh/\1/')
 Tests=$(cd "$TESTDIR" && ls -1 *.test)
@@ -12,7 +19,7 @@ Tests=$(cd "$TESTDIR" && ls -1 *.test)
 usage () {
     set +x
     echo "Usage:"
-    echo "    $0 <VC>"
+    echo "    $0 [-v|--verbose] <VC>"
     echo ""
     echo "  Where <VC> is one of: $(echo $VCSes)"
     exit 1;
@@ -36,7 +43,7 @@ run_test () {
 
     ${VC}_init "$WD" "$REPO"
 
-    if ! (cd "$WD" && sh -x -e "$TESTDIR_ABS/$TEST"); then
+    if ! (cd "$WD" && sh $V_SH -e "$TESTDIR_ABS/$TEST"); then
         echo "$VC / $TEST: Test failed."
         exit 1;
     fi
@@ -49,3 +56,5 @@ for vc in $VCs; do
         run_test $vc $t
     done
 done
+
+echo "All tests appear to pass."
