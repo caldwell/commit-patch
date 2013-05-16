@@ -10,15 +10,15 @@ Vcs-Git: git://github.com/caldwell/commit-patch.git -b debian
 Package: commit-patch
 Architecture: all
 Depends: ${misc:Depends}, ${perl:Depends}, libipc-run-perl, patch, patchutils
-Suggests: darcs | git | mercurial | bzr | subversion | cvs
+Suggests: darcs | git | mercurial | bzr | monotone | subversion | cvs
 Description: utility to commit fine grained patches to source code control repositories
  Normally version control systems don't allow fine grained
  commits. commit-patch allows the user to control exactly what gets
  committed by letting the user supply a patch to be committed rather than
  using the files in the current working directory.
  .
- commit-patch supports Darcs, Git, Mercurial, Bazaar, Subversion, or CVS
- repositories.
+ commit-patch supports Darcs, Git, Mercurial, Bazaar, Monotone, Subversion,
+ or CVS repositories.
  .
  Also included is an Emacs interface to commit-patch. It allows you to just
  hit C-c C-c in any patch buffer to apply and commit only the changes
