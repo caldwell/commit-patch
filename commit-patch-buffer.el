@@ -30,6 +30,10 @@
 (require 'vc)
 (require 'log-edit)
 
+(defvar commit-patch-program
+  (let ((current (or load-file-name (buffer-file-name))))
+    (expand-file-name "commit-patch" (file-name-directory current))))
+
 (defun commit-patch-buffer-in-directory (buffer directory)
   "Commit the patch found in BUFFER by applying it to the repository in
 DIRECTORY with commit-patch(1)."
@@ -59,7 +63,7 @@ DIRECTORY with commit-patch(1)."
                 (with-current-buffer output-buffer
                   (erase-buffer)
                   (let* ((default-directory ,directory) 
-                         (status (process-file "commit-patch" patch
+                         (status (process-file commit-patch-program patch
                                                output-buffer 'display
                                                "-m" comment)))
                     (if (not (eq status 0))
