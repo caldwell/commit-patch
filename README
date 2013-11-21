@@ -19,7 +19,7 @@ PREREQUISITES
           subversion - <http://subversion.tigris.org/>
           cvs        - <http://www.nongnu.org/cvs/>
 
-       On Debian:
+       On Debian/Ubuntu:
          apt-get install libipc-run-perl patch patchutils
 
        On Fedora:
