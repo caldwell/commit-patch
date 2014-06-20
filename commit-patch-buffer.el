@@ -64,7 +64,7 @@ DIRECTORY with commit-patch(1)."
                   (erase-buffer)
                   (let* ((default-directory ,directory) 
                          (status (process-file commit-patch-program patch
-                                               output-buffer 'display
+                                               output-buffer nil
                                                "-m" comment)))
                     (if (not (eq status 0))
                         (progn
