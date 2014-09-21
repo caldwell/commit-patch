@@ -1,12 +1,16 @@
 VERSION := $(shell perl -ne '/VERSION\s*=\s*'"'(.*)'"'/ and print "$$1"' commit-patch)
 
-BIN = commit-patch commit-partial
+BIN = commit-patch commit-partial commit-patch.fat
 MAN = commit-patch.1 commit-partial.1
 ELISP = commit-patch-buffer.el
 DOC = commit-patch.html README COPYING Changes
 ALL = $(BIN) $(MAN) $(ELISP) $(DOC)
 
 all: $(ALL)
+
+commit-patch.fat: commit-patch
+	carton exec fatpack pack $< > $@
+	chmod +x $@
 
 commit-partial:
 	ln -s commit-patch commit-partial
@@ -25,6 +29,7 @@ release: commit-patch-$(VERSION).tar.gz
 commit-patch-$(VERSION).tar.gz: $(ALL) Makefile
 	mkdir commit-patch-$(VERSION)
 	rsync -a $^ commit-patch-$(VERSION)
+	mv -f commit-patch-$(VERSION)/commit-patch.fat commit-patch-$(VERSION)/commit-patch
 	tar czf commit-patch-$(VERSION).tar.gz commit-patch-$(VERSION)
 	rm -rf commit-patch-$(VERSION)
 
