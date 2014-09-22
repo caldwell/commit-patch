@@ -3,6 +3,9 @@ commit-patch (2.5.1)
   * We now use App::Fatpacker to bundle IPC::Run, removing the dependency
     from the release tarball.
 
+  * Work around emacs/tramp bug in commit-patch-buffer.el (thanks Dima
+    Kogan <dima@secretsauce.net>).
+
  -- David Caldwell <david@porkrind.org>  Sun, 21 Sep 2014 17:22:29 -0700
 
 commit-patch (2.5)
