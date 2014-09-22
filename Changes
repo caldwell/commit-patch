@@ -1,3 +1,9 @@
+commit-patch (2.5.2)
+
+  * Fixed dumb bug that caused "make install" to fail.
+
+ -- David Caldwell <david@porkrind.org>  Sun, 21 Sep 2014 18:15:04 -0700
+
 commit-patch (2.5.1)
 
   * We now use App::Fatpacker to bundle IPC::Run, removing the dependency
