@@ -1,6 +1,6 @@
 VERSION := $(shell perl -ne '/VERSION\s*=\s*'"'(.*)'"'/ and print "$$1"' commit-patch)
 
-BIN = commit-patch commit-partial commit-patch.fat
+BIN = commit-patch commit-partial
 MAN = commit-patch.1 commit-partial.1
 ELISP = commit-patch-buffer.el
 DOC = commit-patch.html README COPYING Changes
@@ -26,7 +26,7 @@ commit-patch.html: commit-patch
 
 release: commit-patch-$(VERSION).tar.gz
 
-commit-patch-$(VERSION).tar.gz: $(ALL) Makefile
+commit-patch-$(VERSION).tar.gz: $(ALL) Makefile commit-patch.fat
 	if ! git diff --quiet -- $^; then tput setab 1; tput setaf 3; /bin/echo -n 'WARNING: Directory is not clean!'; tput sgr0; echo; fi
 	mkdir commit-patch-$(VERSION)
 	rsync -a $^ commit-patch-$(VERSION)
