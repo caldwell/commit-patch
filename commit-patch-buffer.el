@@ -1,6 +1,6 @@
 ;;; commit-patch-buffer.el --- commit patches to Darcs, Git, Mercurial, Bazaar, Monotone, Subversion, or CVS repositories
 
-;; Copyright 2003-2013 Jim Radford <radford@bleackbean.org>
+;; Copyright 2003-2014 Jim Radford <radford@bleackbean.org>
 ;;                 and David Caldwell <david@porkrind.org>, All Rights Reserved.
 ;; This code can be distributed under the terms of the GNU Public License (Version 2 or greater).
 ;;
