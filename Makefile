@@ -27,6 +27,7 @@ commit-patch.html: commit-patch
 release: commit-patch-$(VERSION).tar.gz
 
 commit-patch-$(VERSION).tar.gz: $(ALL) Makefile
+	if ! git diff --quiet -- $^; then tput setab 1; tput setaf 3; /bin/echo -n 'WARNING: Directory is not clean!'; tput sgr0; echo; fi
 	mkdir commit-patch-$(VERSION)
 	rsync -a $^ commit-patch-$(VERSION)
 	mv -f commit-patch-$(VERSION)/commit-patch.fat commit-patch-$(VERSION)/commit-patch
