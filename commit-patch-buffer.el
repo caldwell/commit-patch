@@ -1,4 +1,4 @@
-;;; commit-patch-buffer.el --- commit patches to Darcs, Git, Mercurial, Bazaar, Monotone, Subversion, or CVS repositories
+;;; commit-patch-buffer.el --- commit patches to version control repositories
 
 ;; Copyright 2003-2014 Jim Radford <radford@bleackbean.org>
 ;;                 and David Caldwell <david@porkrind.org>, All Rights Reserved.
