@@ -80,7 +80,8 @@ one."
                                             ;; get updated, so we do it by hand.
                                             (run-hooks 'find-file-hooks)))
                             ',visiting-buffers)
-                      (message "Patched and commited %S file(s) and reverted %S." 
+                      (message "Patched and %s %S file(s) and reverted %S."
+                               (if ,amend "amended" "committed")
                                ,(length patch-files) ,(length visiting-buffers))))))
             (delete-file patch))))
      nil
