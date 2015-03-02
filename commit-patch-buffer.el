@@ -43,9 +43,9 @@ one."
   (let* ((patch-files (with-temp-buffer
                         (let ((lsdiff (current-buffer)))
                           (when (eq 0 (with-current-buffer buffer
-                                        (call-process-region (point-min) (point-max) 
+                                        (call-process-region (point-min) (point-max)
                                                              "lsdiff" nil lsdiff nil)))
-                            (split-string (buffer-string)))))) 
+                            (split-string (buffer-string))))))
          (f patch-files) visiting-buffers)
     (while (car f)
       (let ((buf (find-buffer-visiting (car f))))
@@ -64,7 +64,7 @@ one."
                   (write-region (point-min) (point-max) patch))
                 (with-current-buffer output-buffer
                   (erase-buffer)
-                  (let* ((default-directory ,directory) 
+                  (let* ((default-directory ,directory)
                          (status (apply 'process-file commit-patch-program patch
                                                output-buffer nil
                                                (append `("-m" ,comment)
