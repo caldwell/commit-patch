@@ -65,13 +65,10 @@ one."
                 (with-current-buffer output-buffer
                   (erase-buffer)
                   (let* ((default-directory ,directory) 
-                         (args `("-m" ,comment))
-                         (args (if ,amend
-                                   (append args '("--amend"))
-                                 args))
                          (status (apply 'process-file commit-patch-program patch
                                                output-buffer nil
-                                               args)))
+                                               (append `("-m" ,comment)
+                                                     (if ,amend '("--amend"))))))
                     (if (not (eq status 0))
                         (progn
                           (window-buffer (display-buffer output-buffer))
