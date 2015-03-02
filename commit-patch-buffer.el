@@ -34,10 +34,12 @@
   (let ((current (or load-file-name (buffer-file-name))))
     (expand-file-name "commit-patch" (file-name-directory current))))
 
-(defun commit-patch-buffer-in-directory (buffer directory)
-  "Commit the patch found in BUFFER by applying it to the repository in
-DIRECTORY with commit-patch(1)."
-  (interactive "bBuffer to commit: \nDDirectory: ")
+(defun commit-patch-buffer-in-directory (buffer directory &optional amend)
+  "Commit the patch found in BUFFER by applying it to the
+repository in DIRECTORY with commit-patch(1).  If AMEND is
+non-nil, we amend the previous commit instead of creating a new
+one."
+  (interactive "bBuffer to commit: \nDDirectory: \nP")
   (let* ((patch-files (with-temp-buffer
                         (let ((lsdiff (current-buffer)))
                           (when (eq 0 (with-current-buffer buffer
@@ -63,9 +65,13 @@ DIRECTORY with commit-patch(1)."
                 (with-current-buffer output-buffer
                   (erase-buffer)
                   (let* ((default-directory ,directory) 
-                         (status (process-file commit-patch-program patch
+                         (args `("-m" ,comment))
+                         (args (if ,amend
+                                   (append args '("--amend"))
+                                 args))
+                         (status (apply 'process-file commit-patch-program patch
                                                output-buffer nil
-                                               "-m" comment)))
+                                               args)))
                     (if (not (eq status 0))
                         (progn
                           (window-buffer (display-buffer output-buffer))
@@ -84,16 +90,30 @@ DIRECTORY with commit-patch(1)."
      `((log-edit-listfun . (lambda () ',patch-files)))
      "*commit*")))
 
-(defun commit-patch-buffer (&optional arg)
+(defun commit-patch-buffer (&optional arg amend)
   "Commit the patch in the current buffer, applying it to the
 repository in the appropriate directory with commit-patch(1). If
 the current buffer is not in diff-mode or ARG is non-nil then it
 will ask interactively which buffer to commit and to which
-directory to commit it."
+directory to commit it.  If AMEND is non-nil, we amend the
+previous commit instead of creating a new one."
   (interactive "P")
   (if (and (not arg) (eq major-mode 'diff-mode))
-      (commit-patch-buffer-in-directory (buffer-name) (autodetect-patch-directory-root))
-    (call-interactively 'commit-patch-buffer-in-directory)))
+      (commit-patch-buffer-in-directory (buffer-name) (autodetect-patch-directory-root) amend)
+
+    (let ((current-prefix-arg amend))
+      (call-interactively 'commit-patch-buffer-in-directory))))
+
+(defun commit-patch-buffer-amend (&optional arg)
+  "Commit the patch in the current buffer, applying it to the
+repository in the appropriate directory with commit-patch(1). If
+the current buffer is not in diff-mode or ARG is non-nil then it
+will ask interactively which buffer to commit and to which
+directory to commit it.  This is identical to
+`commit-patch-buffer' except it amends the last commit by default
+instead of creating a new one."
+  (interactive "P")
+  (commit-patch-buffer arg t))
 
 (defun autodetect-patch-directory-root ()
   "Tries to autodect where a patch should be committed from using the
@@ -121,7 +141,8 @@ following algorithm:
 (eval-after-load 'diff-mode '(progn
   (setq diff-default-read-only nil)
   (define-key diff-mode-map "\C-c\C-c" 'commit-patch-buffer)
-  (define-key diff-mode-map "\C-xvv" 'commit-patch-buffer)))
+  (define-key diff-mode-map "\C-xvv" 'commit-patch-buffer)
+  (define-key diff-mode-map (kbd "C-c C-S-c") 'commit-patch-buffer-amend)))
 
 (provide 'commit-patch-buffer)
 
