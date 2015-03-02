@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 # Copyright © 2003-2015 David Caldwell <david@porkrind.org>
-#                   and Jim Radford <radford@bleackbean.org>, All Rights Reserved.
+#                   and Jim Radford <radford@bleackbean.org>
 # This code can be distributed under the terms of the GNU Public License (Version 2 or greater).
 
 my $VERSION = '2.5.2';
