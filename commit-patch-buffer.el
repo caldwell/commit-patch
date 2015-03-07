@@ -34,6 +34,23 @@
   (let ((current (or load-file-name (buffer-file-name))))
     (expand-file-name "commit-patch" (file-name-directory current))))
 
+;; Based on vc-git-expanded-log-entry, but don't indent and only grab the full comment using --pretty
+(defun commit-patch-git-log-comment (revision)
+  (with-temp-buffer
+    (apply 'vc-git-command t nil nil (list "log" "--pretty=format:%B" revision "-1"))
+    (goto-char (point-min))
+    (unless (eobp)
+      (buffer-string))))
+
+;; Currently commit-patch only supports --amend with Git and Darcs.
+;; But Darcs amend is very interactive, so we don't support it here.
+(defun commit-patch-last-log-comment (directory)
+  (let ((default-directory directory))
+    (pcase (vc-responsible-backend directory)
+      (`Git
+       (commit-patch-git-log-comment "HEAD")))))
+
+
 (defun commit-patch-buffer-in-directory (buffer directory &optional amend)
   "Commit the patch found in BUFFER by applying it to the
 repository in DIRECTORY with commit-patch(1).  If AMEND is
@@ -53,6 +70,11 @@ one."
           (with-current-buffer buf (vc-buffer-sync))
           (add-to-list 'visiting-buffers buf)))
       (setq f (cdr f)))
+    (if amend
+        (with-current-buffer (get-buffer-create "*commit*")
+          (erase-buffer)
+          (insert (or (commit-patch-last-log-comment directory) ""))
+          (goto-char 0)))
     (log-edit
      `(lambda () (interactive)
         (let ((patch (make-temp-file "commit-buffer" nil))
