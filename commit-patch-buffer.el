@@ -63,6 +63,7 @@ one."
                                         (call-process-region (point-min) (point-max)
                                                              "lsdiff" nil lsdiff nil)))
                             (split-string (buffer-string))))))
+         (log-buffer-name (if amend "*amend*" "*commit*"))
          (f patch-files) visiting-buffers)
     (while (car f)
       (let ((buf (find-buffer-visiting (car f))))
@@ -71,7 +72,7 @@ one."
           (add-to-list 'visiting-buffers buf)))
       (setq f (cdr f)))
     (if amend
-        (with-current-buffer (get-buffer-create "*commit*")
+        (with-current-buffer (get-buffer-create log-buffer-name)
           (erase-buffer)
           (insert (or (commit-patch-last-log-comment directory) ""))
           (goto-char 0)))
@@ -108,7 +109,7 @@ one."
             (delete-file patch))))
      nil
      `((log-edit-listfun . (lambda () ',patch-files)))
-     "*commit*")))
+     log-buffer-name)))
 
 (defun commit-patch-buffer (&optional arg amend)
   "Commit the patch in the current buffer, applying it to the
