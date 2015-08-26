@@ -30,9 +30,11 @@
 (require 'vc)
 (require 'log-edit)
 
+;; Prefer a locally installed commit patch over one installed in the PATH.
 (defvar commit-patch-program
-  (let ((current (or load-file-name (buffer-file-name))))
-    (expand-file-name "commit-patch" (file-name-directory current))))
+  (let* ((this-path (or load-file-name (buffer-file-name)))
+         (local-path (expand-file-name "commit-patch" (file-name-directory this-path))))
+    (if (file-executable-p local-path) local-path "commit-patch")))
 
 ;; Based on vc-git-expanded-log-entry, but don't indent and only grab the full comment using --pretty
 (defun commit-patch-git-log-comment (revision)
