@@ -30,11 +30,34 @@
 (require 'vc)
 (require 'log-edit)
 
-;; Prefer a locally installed commit patch over one installed in the PATH.
-(defvar commit-patch-program
+
+(defcustom commit-patch-program
+  ;; Prefer a locally installed commit patch over one installed in the PATH.
   (let* ((this-path (or load-file-name (buffer-file-name)))
          (local-path (expand-file-name "commit-patch" (file-name-directory this-path))))
-    (if (file-executable-p local-path) local-path "commit-patch")))
+    (if (file-executable-p local-path) local-path "commit-patch"))
+  "The pathname of the commit-patch executable to use. This could be a
+string, or a function. If a function, then this is called every
+time the program path is needed to retrieve the path. The
+function takes no arguments, but can use variables such as
+`default-directory'. This is useful to find commit-patch in different
+places on different machines when using TRAMP."
+  :type '(choice
+	   (string :tag "Program path")
+	   (function :tag "Function that returns the program path"))
+  :group 'commit-patch)
+
+(defun commit-patch--get-program ()
+  "Retrieves the path to the commit-patch program. This is the value of
+the `commit-patch-program' variable, if it is a string, or the value
+returned by the `commit-patch-program' function, if it is a function."
+  (let ((program
+         (cond
+          ((stringp   commit-patch-program) commit-patch-program)
+          ((functionp commit-patch-program) (funcall commit-patch-program))
+          (t (error "commit-patch-program must be a string or function: %s"
+                    commit-patch-program)))))
+    (or program (error "commit-patch-program is nil!"))))
 
 ;; Based on vc-git-expanded-log-entry, but don't indent and only grab the full comment using --pretty
 (defun commit-patch-git-log-comment (revision)
@@ -90,7 +113,7 @@ one."
                 (with-current-buffer output-buffer
                   (erase-buffer)
                   (let* ((default-directory ,directory)
-                         (status (apply 'process-file commit-patch-program patch
+                         (status (apply 'process-file (commit-patch--get-program) patch
                                                output-buffer nil
                                                (append `("-m" ,comment)
                                                      (if ,amend '("--amend"))))))
