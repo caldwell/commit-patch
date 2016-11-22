@@ -175,7 +175,7 @@ following algorithm:
     (beginning-of-buffer)
     (diff-hunk-next) ;; Have to be in a hunk or diff-hunk-file-names won't work.
     (let ((diff-path (reverse (split-string (car (diff-hunk-file-names)) "/")))
-          (file-path (reverse (split-string (buffer-file-name (car (diff-find-source-location))) "/"))))
+          (file-path (reverse (split-string (file-chase-links (buffer-file-name (car (diff-find-source-location)))) "/"))))
       (while (string-equal (car file-path) (car diff-path))
         (setq file-path (cdr file-path))
         (setq diff-path (cdr diff-path)))
