@@ -256,6 +256,8 @@ END {
 }
 
 
+=encoding utf-8
+
 =head1 NAME
 
 commit-patch - commit patches to I<Darcs>, I<Git>, I<Mercurial>, I<Bazaar>, I<Monotone>, I<Subversion>, or I<CVS> repositories
