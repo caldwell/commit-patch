@@ -1,3 +1,14 @@
+commit-patch (2.6)
+
+  * Support --amend from the Emacs interface (Dima Kogan)
+
+  * Fixed a bug with symlinked files in repos (Dima Kogan)
+
+  * Allow Emacs config option `commit-patch-program` to be a function
+    (Dima Kogan)
+
+ -- David Caldwell <david@porkrind.org>  Sun, 03 Feb 2019 00:24:11 -0800
+
 commit-patch (2.5.2)
 
   * Fixed dumb bug that caused "make install" to fail.
