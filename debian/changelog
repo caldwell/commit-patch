@@ -10,6 +10,8 @@ commit-patch (2.6-1) unstable; urgency=medium
 
   * Upgrade to debhelper 10
 
+  * Comply with debian-emacs-policy
+
  -- David Caldwell <david@porkrind.org>  Wed, 13 Feb 2019 23:20:24 -0800
 
 commit-patch (2.5-1) unstable; urgency=low
