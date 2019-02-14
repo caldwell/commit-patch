@@ -1,0 +1,13 @@
+Index: commit-patch/commit-patch
+===================================================================
+--- commit-patch.orig/commit-patch	2019-02-13 23:18:12.007932991 -0800
++++ commit-patch/commit-patch	2019-02-13 23:18:35.996431443 -0800
+@@ -178,7 +178,7 @@
+ 
+         run([split(/ /,$vc{diff}), @ARGV], '>>', $patch);
+     }
+-    system(($ENV{VISUAL} || $ENV{EDITOR} || 'vi')." ".$patch);
++    system(($ENV{VISUAL} || $ENV{EDITOR} || 'editor')." ".$patch);
+     my $last_patch = "#last-comit-partial.patch";
+     unlink "$last_patch.3";
+     rename "$last_patch.2", "$last_patch.3";
