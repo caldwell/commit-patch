@@ -3,9 +3,9 @@ Author: David Caldwell <david@porkrind.org>
 
 Index: commit-patch/Makefile
 ===================================================================
---- commit-patch.orig/Makefile	2013-05-15 20:43:23.000000000 -0700
-+++ commit-patch/Makefile	2013-05-15 20:43:23.000000000 -0700
-@@ -36,9 +36,9 @@
+--- commit-patch.orig/Makefile	2019-02-13 23:14:06.678581982 -0800
++++ commit-patch/Makefile	2019-02-13 23:14:06.646581248 -0800
+@@ -42,9 +42,9 @@
  install: $(ALL)
  	mkdir -p "$(PREFIX)/bin"
  	mkdir -p "$(PREFIX)/share/man/man1"
