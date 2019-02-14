@@ -5,7 +5,7 @@ Maintainer: David Caldwell <david@porkrind.org>
 Build-Depends: debhelper (>= 8.0.0~), perl
 Standards-Version: 3.9.4
 Homepage: http://porkrind.org/commit-patch/
-Vcs-Git: git://github.com/caldwell/commit-patch.git -b debian
+Vcs-Git: https://github.com/caldwell/commit-patch.git -b debian
 
 Package: commit-patch
 Architecture: all
