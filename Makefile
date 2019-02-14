@@ -8,6 +8,10 @@ ALL = $(BIN) $(MAN) $(ELISP) $(DOC)
 
 all: $(ALL)
 
+commit-patch.fat: commit-patch
+	carton exec fatpack pack $< > $@
+	chmod +x $@
+
 commit-partial:
 	ln -s commit-patch commit-partial
 
@@ -22,9 +26,11 @@ commit-patch.html: commit-patch
 
 release: commit-patch-$(VERSION).tar.gz
 
-commit-patch-$(VERSION).tar.gz: $(ALL) Makefile
+commit-patch-$(VERSION).tar.gz: $(ALL) Makefile commit-patch.fat
+	if ! git diff --quiet -- $^; then tput setab 1; tput setaf 3; /bin/echo -n 'WARNING: Directory is not clean!'; tput sgr0; echo; fi
 	mkdir commit-patch-$(VERSION)
 	rsync -a $^ commit-patch-$(VERSION)
+	mv -f commit-patch-$(VERSION)/commit-patch.fat commit-patch-$(VERSION)/commit-patch
 	tar czf commit-patch-$(VERSION).tar.gz commit-patch-$(VERSION)
 	rm -rf commit-patch-$(VERSION)
 

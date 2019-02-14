@@ -1,9 +1,9 @@
 #!/usr/bin/perl -w
-# Copyright (c) 2003-2013 David Caldwell <david@porkrind.org>
-#                     and Jim Radford <radford@bleackbean.org>, All Rights Reserved.
+# Copyright © 2003-2015 David Caldwell <david@porkrind.org>
+#                   and Jim Radford <radford@bleackbean.org>
 # This code can be distributed under the terms of the GNU Public License (Version 2 or greater).
 
-my $VERSION = '2.5';
+my $VERSION = '2.6';
 
 use strict;
 use Cwd qw(abs_path);
@@ -256,6 +256,8 @@ END {
 }
 
 
+=encoding utf-8
+
 =head1 NAME
 
 commit-patch - commit patches to I<Darcs>, I<Git>, I<Mercurial>, I<Bazaar>, I<Monotone>, I<Subversion>, or I<CVS> repositories
@@ -381,7 +383,7 @@ Jim Radford <radford@blackbean.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2003-2013 by David Caldwell and Jim Radford.
+Copyright © 2003-2015 by David Caldwell and Jim Radford.
 
 B<commit-patch> is distributed under the GNU General Public
 License. See the COPYING file in the distribution for more details.

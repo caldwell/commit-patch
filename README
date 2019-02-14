@@ -6,7 +6,6 @@ PREREQUISITES
        commit-patch relies on several programs to get the job done:
 
           perl       - <http://www.perl.org>
-          IPC::Run   - <http://search.cpan.org/dist/IPC-Run/>
           patch      - <http://www.gnu.org/software/patch/>
           interdiff  - <http://cyberelk.net/tim/software/patchutils/>
           cp         - Ideally installed on your system already. :-)
@@ -19,7 +18,7 @@ PREREQUISITES
           subversion - <http://subversion.tigris.org/>
           cvs        - <http://www.nongnu.org/cvs/>
 
-       On Debian:
+       On Debian/Ubuntu:
          apt-get install libipc-run-perl patch patchutils
 
        On Fedora:
@@ -57,7 +56,7 @@ AUTHORS
        o   Jim Radford <radford@blackbean.org>
 
 COPYRIGHT AND LICENSE
-       Copyright 2003-2013 by David Caldwell and Jim Radford.
+       Copyright © 2003-2015 by David Caldwell and Jim Radford.
 
        commit-patch is distributed under the GNU General Public
        License. See the COPYING file in the distribution for more
