@@ -3,3 +3,4 @@ files
 *.log
 *.debhelper
 *.substvars
+debhelper-build-stamp

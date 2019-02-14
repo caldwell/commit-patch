@@ -8,6 +8,8 @@ commit-patch (2.6-1) unstable; urgency=medium
 
   * Use 'editor' instead of 'vi' when EDITOR and VISUAL are not set.
 
+  * Upgrade to debhelper 10
+
  -- David Caldwell <david@porkrind.org>  Wed, 13 Feb 2019 23:20:24 -0800
 
 commit-patch (2.5-1) unstable; urgency=low
