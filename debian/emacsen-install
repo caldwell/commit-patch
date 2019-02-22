@@ -8,7 +8,6 @@
 FLAVOR=$1
 PACKAGE=commit-patch
 
-if [ ${FLAVOR} = emacs ]; then exit 0; fi
 
 echo install/${PACKAGE}: Handling install for emacsen flavor ${FLAVOR}
 
@@ -35,7 +34,9 @@ install -m 755 -d ${ELCDIR}
 cd ${ELDIR}
 FILES=`echo *.el`
 cd ${ELCDIR}
-ln -sf ${ELRELDIR}/*.el .
+if [ $ELDIR != $ELCDIR ]; then
+    ln -sf ${ELRELDIR}/*.el .
+fi
 
 cat << EOF > path.el
 (debian-pkg-add-load-path-item ".")
