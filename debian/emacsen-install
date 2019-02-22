@@ -8,6 +8,14 @@
 FLAVOR=$1
 PACKAGE=commit-patch
 
+case $FLAVOR in
+    xemacs*)
+        echo install/${PACKAGE}: Skipping unsupported emacs ${FLAVOR}
+        exit 0
+        ;;
+    *)
+        echo install/${PACKAGE}: Handling install of emacsen flavor ${FLAVOR}
+esac
 
 echo install/${PACKAGE}: Handling install for emacsen flavor ${FLAVOR}
 
