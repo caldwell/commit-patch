@@ -1,3 +1,10 @@
+commit-patch (2.6-2) unstable; urgency=medium
+
+  * Don't attempt to byte compile on xemacs (not supported by upstream)
+    (Closes: 922926)
+
+ -- David Caldwell <david@porkrind.org>  Fri, 22 Feb 2019 04:09:12 -0800
+
 commit-patch (2.6-1) unstable; urgency=medium
 
   * New upstream release.
