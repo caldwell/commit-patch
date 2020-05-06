@@ -4,6 +4,7 @@ commit-patch (2.6-3) UNRELEASED; urgency=medium
   * Use secure URI in Homepage field.
   * debian/control: Add Vcs-Browser field
   * Bump debhelper from old 10 to 12.
+  * Set debhelper-compat version in Build-Depends.
 
  -- Debian Janitor <janitor@jelmer.uk>  Wed, 06 May 2020 20:04:44 +0000
 
