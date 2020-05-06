@@ -5,6 +5,7 @@ commit-patch (2.6-3) UNRELEASED; urgency=medium
   * debian/control: Add Vcs-Browser field
   * Bump debhelper from old 10 to 12.
   * Set debhelper-compat version in Build-Depends.
+  * Update standards version to 4.5.0, no changes needed.
 
  -- Debian Janitor <janitor@jelmer.uk>  Wed, 06 May 2020 20:04:44 +0000
 
