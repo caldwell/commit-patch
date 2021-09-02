@@ -6,6 +6,7 @@ Build-Depends: debhelper (>= 10.0.0~), perl
 Standards-Version: 4.3.0
 Homepage: https://porkrind.org/commit-patch/
 Vcs-Git: https://github.com/caldwell/commit-patch.git -b debian
+Vcs-Browser: https://github.com/caldwell/commit-patch/tree/debian
 
 Package: commit-patch
 Architecture: all
