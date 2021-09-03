@@ -91,7 +91,10 @@ one."
          (log-buffer-name (if amend "*amend*" "*commit*"))
          (f patch-files) visiting-buffers)
     (while (car f)
-      (let ((buf (find-buffer-visiting (car f))))
+      (let* ((default-directory directory)
+             (buf (or
+                   (find-buffer-visiting (expand-file-name (car f)))
+                   (find-buffer-visiting (expand-file-name (diff-filename-drop-dir (car f)))))))
         (when buf
           (with-current-buffer buf (vc-buffer-sync))
           (add-to-list 'visiting-buffers buf)))
