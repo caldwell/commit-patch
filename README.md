@@ -46,22 +46,33 @@ other environments, most notably Windows. Use at your own risk.
 Instructions
 ------------
 
-- commit-patch: See the man page or perldoc:
-  ```
-  man ./commit-patch.1
-  perldoc commit-patch
-  ```
+## commit-patch
 
-- commit-patch-buffer.el is an emacs interface to
-  commit-patch. It allows you to just hit C-c C-c in any patch
-  buffer to apply and commit only the changes indicated by the
-  patch, regardless of the changes in your working directory.
+See the man page or perldoc:
 
-  One method of working with commit-patch-buffer is to just M-x
-  vc-diff a file then kill, split or edit the resulting hunks and
-  to then hit C-c C-c to commit the patch. The other is to use
-  PCL cvs mode to tag many files and then to diff them into a
-  buffer which can again be edited and committed.
+    man ./commit-patch.1
+    perldoc commit-patch
+
+
+## commit-patch-buffer.el
+
+commit-patch-buffer.el is an emacs interface to `commit-patch`. It
+allows you to just hit `C-c C-c` in any patch buffer to apply and commit
+only the changes indicated by the patch, regardless of the changes in
+your working directory.
+
+To use commit-patch-buffer with diff mode automatically, add this to
+your emacs init file:
+
+    (eval-after-load 'diff-mode
+      '(require 'commit-patch-buffer nil 'noerror))
+
+The easy way of working with commit-patch-buffer is to `M-x vc-diff` a
+file (or `M-x vc-root-diff` your whole project) then kill, split or edit
+the resulting hunks using diff mode's built-in commands and to then hit
+`C-c C-c` to commit the patch.
+
+
 
 Homepage
 --------
