@@ -9,20 +9,20 @@ Prerequisites
 
 commit-patch relies on several programs to get the job done:
 
-- [perl](http://www.perl.org)
-- [patch](http://www.gnu.org/software/patch/)
+- [perl](https://www.perl.org)
+- [patch](https://www.gnu.org/software/patch/)
 - [interdiff](http://cyberelk.net/tim/software/patchutils/)
 - cp - Ideally installed on your system already. :-)
 
 and, of course, one of:
 
 - [darcs](http://darcs.net/)
-- [git](http://git.or.cz/)
-- [mercurial](http://www.selenic.com/mercurial/)
-- [bazaar](http://bazaar-vcs.org/)
-- [monotone](http://www.monotone.ca/)
+- [git](https://git-scm.com/)
+- [mercurial](https://subversion.apache.org/)
+- [bazaar](https://bazaar.canonical.com/)
+- [monotone](https://www.monotone.ca/)
 - [subversion](http://subversion.tigris.org/)
-- [cvs](http://www.nongnu.org/cvs/)
+- [cvs](https://www.nongnu.org/cvs/)
 
 ## Installing Prerequisites
 
@@ -34,7 +34,7 @@ On Fedora:
 
     yum install perl-IPC-Run patch patchutils
 
-On Mac OS X w/ Homebrew <http://mxcl.github.io/homebrew/>
+On Mac OS X w/ [Homebrew](https://brew.sh)
 
     brew install patchutils
     cpan -i IPC::Run
@@ -65,7 +65,7 @@ Instructions
 
 Homepage
 --------
-http://www.porkrind.org/commit-patch/
+https://porkrind.org/commit-patch/
 
 Authors
 -------
