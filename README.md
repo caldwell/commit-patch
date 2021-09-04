@@ -7,7 +7,11 @@ Commit patches to Darcs, Git, Mercurial, Bazaar, Monotone, Subversion, or CVS
 Prerequisites
 -------------
 
-commit-patch relies on several programs to get the job done:
+`commit-patch` is known to run on Linux and Mac OS X. It is perl,
+so ideally it will run anywhere, but we have never tested in
+other environments, most notably Windows. Use at your own risk.
+
+`commit-patch` relies on several programs to get the job done:
 
 - [perl](https://www.perl.org)
 - [patch](https://www.gnu.org/software/patch/)
@@ -39,9 +43,6 @@ On Mac OS X w/ [Homebrew](https://brew.sh)
     brew install patchutils
     cpan -i IPC::Run
 
-commit-patch is known to run on Linux and Mac OS X. It is perl,
-so ideally it will run anywhere, but we have never tested in
-other environments, most notably Windows. Use at your own risk.
 
 Instructions
 ------------
