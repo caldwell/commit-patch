@@ -1,0 +1,81 @@
+commit-patch
+============
+
+Commit patches to Darcs, Git, Mercurial, Bazaar, Monotone, Subversion, or CVS
+
+
+Prerequisites
+-------------
+
+commit-patch relies on several programs to get the job done:
+
+- [perl](http://www.perl.org)
+- [patch](http://www.gnu.org/software/patch/)
+- [interdiff](http://cyberelk.net/tim/software/patchutils/)
+- cp - Ideally installed on your system already. :-)
+
+and, of course, one of:
+
+- [darcs](http://darcs.net/)
+- [git](http://git.or.cz/)
+- [mercurial](http://www.selenic.com/mercurial/)
+- [bazaar](http://bazaar-vcs.org/)
+- [monotone](http://www.monotone.ca/)
+- [subversion](http://subversion.tigris.org/)
+- [cvs](http://www.nongnu.org/cvs/)
+
+## Installing Prerequisites
+
+On Debian/Ubuntu:
+
+    apt-get install libipc-run-perl patch patchutils
+
+On Fedora:
+
+    yum install perl-IPC-Run patch patchutils
+
+On Mac OS X w/ Homebrew <http://mxcl.github.io/homebrew/>
+
+    brew install patchutils
+    cpan -i IPC::Run
+
+commit-patch is known to run on Linux and Mac OS X. It is perl,
+so ideally it will run anywhere, but we have never tested in
+other environments, most notably Windows. Use at your own risk.
+
+Instructions
+------------
+
+- commit-patch: See the man page or perldoc:
+  ```
+  man ./commit-patch.1
+  perldoc commit-patch
+  ```
+
+- commit-patch-buffer.el is an emacs interface to
+  commit-patch. It allows you to just hit C-c C-c in any patch
+  buffer to apply and commit only the changes indicated by the
+  patch, regardless of the changes in your working directory.
+
+  One method of working with commit-patch-buffer is to just M-x
+  vc-diff a file then kill, split or edit the resulting hunks and
+  to then hit C-c C-c to commit the patch. The other is to use
+  PCL cvs mode to tag many files and then to diff them into a
+  buffer which can again be edited and committed.
+
+Homepage
+--------
+http://www.porkrind.org/commit-patch/
+
+Authors
+-------
+- David Caldwell <david@porkrind.org>
+- Jim Radford <radford@blackbean.org>
+
+Copyright and License
+---------------------
+Copyright © 2003-2021 by David Caldwell and Jim Radford.
+
+`commit-patch` is distributed under the GNU General Public
+License. See the COPYING file in the distribution for more
+details.
