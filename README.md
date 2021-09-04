@@ -16,13 +16,13 @@ commit-patch relies on several programs to get the job done:
 
 and, of course, one of:
 
-- [darcs](http://darcs.net/)
 - [git](https://git-scm.com/)
 - [mercurial](https://subversion.apache.org/)
-- [bazaar](https://bazaar.canonical.com/)
-- [monotone](https://www.monotone.ca/)
+- [darcs](http://darcs.net/)
 - [subversion](http://subversion.tigris.org/)
 - [cvs](https://www.nongnu.org/cvs/)
+- [bazaar](https://bazaar.canonical.com/)
+- [monotone](https://www.monotone.ca/)
 
 ## Installing Prerequisites
 
