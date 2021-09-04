@@ -60,7 +60,7 @@ On Mac OS X w/ [Homebrew](https://brew.sh)
 Instructions
 ------------
 
-## commit-patch
+### commit-patch
 
 See the man page or perldoc:
 
@@ -68,7 +68,7 @@ See the man page or perldoc:
     perldoc commit-patch
 
 
-## commit-patch-buffer.el
+### commit-patch-buffer.el
 
 commit-patch-buffer.el is an emacs interface to `commit-patch`. It
 allows you to just hit `C-c C-c` in any patch buffer to apply and commit
