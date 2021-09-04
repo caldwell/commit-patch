@@ -95,7 +95,7 @@ local development. Once Carton is installed:
 
     carton install
 
-After than `commit-patch` and `commit-partial` should work (there is no
+After than `commit-patch` and `commit-partial` should work. There is no
 need to `carton exec` them—the code autodetects the local libs.
 
 
