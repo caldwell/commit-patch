@@ -3,7 +3,7 @@
 #                   and Jim Radford <radford@bleackbean.org>
 # This code can be distributed under the terms of the GNU Public License (Version 2 or greater).
 
-my $VERSION = '2.6.1';
+my $VERSION = '2.6.2';
 my $FALLBACK_EDITOR = 'vi';
 
 use strict;
