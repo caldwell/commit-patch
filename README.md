@@ -13,7 +13,7 @@ On a recent Debian/Ubuntu:
 
 Anywhere else: Install the prerequisites below and download the release
 tarball from the [homepage](https://porkrind.org/commit-patch/). This
-tarball contains a "fatpackad" version of the `commit-patch` perl script
+tarball contains a "fatpacked" version of the `commit-patch` perl script
 with the external perl dependencies embedded. Then put the commit-patch
 and commit-partial binaries into your `PATH`.
 
