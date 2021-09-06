@@ -1,3 +1,24 @@
+commit-patch (2.6.1-1) unstable; urgency=medium
+
+  * New upstream release:
+
+    * Fixed a bug in `commit-patch-buffer` that caused `vc-annotate` to be
+      out of date (https://github.com/caldwell/commit-patch/issues/14).
+
+  * Update standards version to 4.5.1.
+
+  * Set debhelper-compat version in Build-Depends.
+
+  * Bump debhelper from old 10 to 13.
+
+  * debian/control: Add Vcs-Browser field
+
+  * Use secure URI in Homepage field.
+
+  * Use secure copyright file specification URI.
+
+ -- David Caldwell <david@porkrind.org>  Mon, 06 Sep 2021 10:52:51 -0700
+
 commit-patch (2.6-2) unstable; urgency=medium
 
   * Don't attempt to byte compile on xemacs (not supported by upstream)
