@@ -9,7 +9,8 @@ ALL = $(BIN) $(MAN) $(ELISP) $(DOC)
 all: $(ALL)
 
 commit-patch.fat: commit-patch
-	carton exec fatpack pack $< > $@
+	carton exec fatpack pack $< > $@.new || { rm -f $@.new; false; }
+	mv -f $@.new $@
 	chmod +x $@
 
 commit-patch.1: commit-patch
