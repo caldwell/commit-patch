@@ -4,7 +4,7 @@
 ;;                 and David Caldwell <david@porkrind.org>
 ;; This code can be distributed under the terms of the GNU Public License (Version 2 or greater).
 ;;
-;; Version: 2.5
+;; Version: 2.6.2
 ;;
 ;; Author: Jim Radford <radford@blackbean.org>
 ;;         David Caldwell <david@porkrind.org>

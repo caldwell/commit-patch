@@ -3,7 +3,8 @@
 #                   and Jim Radford <radford@bleackbean.org>
 # This code can be distributed under the terms of the GNU Public License (Version 2 or greater).
 
-my $VERSION = '2.6.1';
+my $VERSION = '2.6.2';
+my $FALLBACK_EDITOR = 'vi';
 
 use strict;
 use Cwd qw(abs_path);
@@ -180,7 +181,7 @@ if ($commit_partial) {
 
         run([split(/ /,$vc{diff}), @ARGV], '>>', $patch);
     }
-    system(($ENV{VISUAL} || $ENV{EDITOR} || 'vi')." ".$patch);
+    system(($ENV{VISUAL} || $ENV{EDITOR} || $FALLBACK_EDITOR)." ".$patch);
     my $last_patch = "#last-comit-partial.patch";
     unlink "$last_patch.3";
     rename "$last_patch.2", "$last_patch.3";
@@ -385,7 +386,7 @@ Jim Radford <radford@blackbean.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright © 2003-2015 by David Caldwell and Jim Radford.
+Copyright © 2003-2021 by David Caldwell and Jim Radford.
 
 B<commit-patch> is distributed under the GNU General Public
 License. See the COPYING file in the distribution for more details.
