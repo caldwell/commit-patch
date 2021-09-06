@@ -1,3 +1,10 @@
+commit-patch (2.6.1)
+
+  * Fixed a bug in `commit-patch-buffer` that caused `vc-annotate` to be
+    out of date (https://github.com/caldwell/commit-patch/issues/14).
+
+ -- David Caldwell <david@porkrind.org>  Mon, 06 Sep 2021 08:48:57 -0700
+
 commit-patch (2.6)
 
   * Support --amend from the Emacs interface (Dima Kogan)
