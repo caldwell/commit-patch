@@ -12,14 +12,8 @@ commit-patch.fat: commit-patch
 	carton exec fatpack pack $< > $@
 	chmod +x $@
 
-commit-partial:
-	ln -s commit-patch commit-partial
-
 commit-patch.1: commit-patch
 	pod2man -c "User Commands" $< > $@
-
-commit-partial.1:
-	ln -s commit-patch.1 commit-partial.1
 
 commit-patch.html: commit-patch
 	pod2html --title="commit-patch Documentation" $< > $@
