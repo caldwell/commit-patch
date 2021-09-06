@@ -1,9 +1,11 @@
-commit-patch (2.6.1-1) unstable; urgency=medium
+commit-patch (2.6.2-1) unstable; urgency=medium
 
   * New upstream release:
 
     * Fixed a bug in `commit-patch-buffer` that caused `vc-annotate` to be
       out of date (https://github.com/caldwell/commit-patch/issues/14).
+
+    * Minor changes to allow easier packaging
 
   * Update standards version to 4.5.1.
 
@@ -17,7 +19,7 @@ commit-patch (2.6.1-1) unstable; urgency=medium
 
   * Use secure copyright file specification URI.
 
- -- David Caldwell <david@porkrind.org>  Mon, 06 Sep 2021 10:52:51 -0700
+ -- David Caldwell <david@porkrind.org>  Mon, 06 Sep 2021 12:37:46 -0700
 
 commit-patch (2.6-2) unstable; urgency=medium
 
