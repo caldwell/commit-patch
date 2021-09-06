@@ -1,3 +1,2 @@
 #!/bin/sh
-quilt pop -a
 gbp buildpackage --git-upstream-branch=master --git-debian-branch=debian --git-upstream-tag='%(version)s' -rfakeroot --git-ignore-new -i'^(buildpackage$|\.git)'
