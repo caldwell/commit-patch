@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "configure" ]; then
+    if test -d /usr/share/emacs/site-lisp/commit-patch; then
+        # Due to a bug in the commit-patch-2.6-2 emacsen-remove script, the
+        # xemacs byte compiled files got purged instead of the emacs
+        # files. Detect this and clean them up now.
+        echo install/commit-patch: purging old version of byte-compiled files for emacs
+        rm -rf /usr/share/emacs/site-lisp/commit-patch
+    fi
+fi
+
+#DEBHELPER#
