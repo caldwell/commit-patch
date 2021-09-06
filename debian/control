@@ -2,7 +2,7 @@ Source: commit-patch
 Section: vcs
 Priority: optional
 Maintainer: David Caldwell <david@porkrind.org>
-Build-Depends: debhelper-compat (= 13), perl
+Build-Depends: debhelper-compat (= 13), dh-elpa (>= 2.0.8~), perl
 Standards-Version: 4.5.1
 Homepage: https://porkrind.org/commit-patch/
 Vcs-Git: https://github.com/caldwell/commit-patch.git -b debian

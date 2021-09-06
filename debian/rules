@@ -4,8 +4,13 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+ELPA_NAME=commit-patch-buffer
+export ELPA_NAME
+
 override_dh_auto_install:
-	make install PREFIX=debian/commit-patch/usr LISPDIR=/share/emacs/site-lisp/commit-patch
+	make install PREFIX=debian/commit-patch/usr
+	# dh_elpa copies the .el file to a new place
+	rm debian/commit-patch/usr/share/emacs/site-lisp/commit-patch-buffer.el
 	# No need for another copy of the GPL:
 	rm debian/commit-patch/usr/share/doc/commit-patch/COPYING
 	# Installed by dh_installchangelogs:
@@ -18,4 +23,4 @@ override_dh_auto_test:
 	true
 
 %:
-	dh $@ --no-parallel
+	dh $@ --no-parallel --with elpa
