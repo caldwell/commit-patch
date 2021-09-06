@@ -5,7 +5,7 @@ commit-patch (2.6.2-1) unstable; urgency=medium
     * Fixed a bug in `commit-patch-buffer` that caused `vc-annotate` to be
       out of date (https://github.com/caldwell/commit-patch/issues/14).
 
-    * Minor changes to allow easier packaging
+    * Minor changes to allow easier packaging.
 
   * Update standards version to 4.5.1.
 
@@ -13,7 +13,7 @@ commit-patch (2.6.2-1) unstable; urgency=medium
 
   * Bump debhelper from old 10 to 13.
 
-  * debian/control: Add Vcs-Browser field
+  * debian/control: Add Vcs-Browser field.
 
   * Use secure URI in Homepage field.
 
