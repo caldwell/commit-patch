@@ -1,7 +1,6 @@
 *~
 \#*
 *.html
-*.1
+commit-patch.1
 *.orig
-commit-partial
 *.tmp

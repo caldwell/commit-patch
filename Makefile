@@ -3,23 +3,18 @@ VERSION := $(shell perl -ne '/VERSION\s*=\s*'"'(.*)'"'/ and print "$$1"' commit-
 BIN = commit-patch commit-partial
 MAN = commit-patch.1 commit-partial.1
 ELISP = commit-patch-buffer.el
-DOC = commit-patch.html README COPYING Changes
+DOC = commit-patch.html README.md COPYING Changes
 ALL = $(BIN) $(MAN) $(ELISP) $(DOC)
 
 all: $(ALL)
 
 commit-patch.fat: commit-patch
-	carton exec fatpack pack $< > $@
+	carton exec fatpack pack $< > $@.new || { rm -f $@.new; false; }
+	mv -f $@.new $@
 	chmod +x $@
-
-commit-partial:
-	ln -s commit-patch commit-partial
 
 commit-patch.1: commit-patch
 	pod2man -c "User Commands" $< > $@
-
-commit-partial.1:
-	ln -s commit-patch.1 commit-partial.1
 
 commit-patch.html: commit-patch
 	pod2html --title="commit-patch Documentation" $< > $@

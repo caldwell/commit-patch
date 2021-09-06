@@ -1,6 +1,6 @@
 ;;; commit-patch-buffer.el --- commit patches to Darcs, Git, Mercurial, Bazaar, Monotone, Subversion, or CVS repositories
 
-;; Copyright 2003-2015 Jim Radford <radford@bleackbean.org>
+;; Copyright 2003-2021 Jim Radford <radford@bleackbean.org>
 ;;                 and David Caldwell <david@porkrind.org>
 ;; This code can be distributed under the terms of the GNU Public License (Version 2 or greater).
 ;;
@@ -91,7 +91,10 @@ one."
          (log-buffer-name (if amend "*amend*" "*commit*"))
          (f patch-files) visiting-buffers)
     (while (car f)
-      (let ((buf (find-buffer-visiting (car f))))
+      (let* ((default-directory directory)
+             (buf (or
+                   (find-buffer-visiting (expand-file-name (car f)))
+                   (find-buffer-visiting (expand-file-name (diff-filename-drop-dir (car f)))))))
         (when buf
           (with-current-buffer buf (vc-buffer-sync))
           (add-to-list 'visiting-buffers buf)))
