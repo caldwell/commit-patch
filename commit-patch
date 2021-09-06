@@ -4,6 +4,7 @@
 # This code can be distributed under the terms of the GNU Public License (Version 2 or greater).
 
 my $VERSION = '2.6.1';
+my $FALLBACK_EDITOR = 'vi';
 
 use strict;
 use Cwd qw(abs_path);
@@ -180,7 +181,7 @@ if ($commit_partial) {
 
         run([split(/ /,$vc{diff}), @ARGV], '>>', $patch);
     }
-    system(($ENV{VISUAL} || $ENV{EDITOR} || 'vi')." ".$patch);
+    system(($ENV{VISUAL} || $ENV{EDITOR} || $FALLBACK_EDITOR)." ".$patch);
     my $last_patch = "#last-comit-partial.patch";
     unlink "$last_patch.3";
     rename "$last_patch.2", "$last_patch.3";
