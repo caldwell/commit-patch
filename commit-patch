@@ -284,7 +284,7 @@ patch from the current changes in the current working directory and
 launch your editor so that you can edit the patch and the commit
 message (using the B<VISUAL> environment variable, or if that isn't
 set the B<EDITOR> environment variable, or, if I<that> isn't set,
-B<vi>. Any files you specify will be passed to your version control's
+B<vi>). Any files you specify will be passed to your version control's
 diff command.
 
 B<commit-patch> currently supports the following version control systems:
