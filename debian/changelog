@@ -19,7 +19,11 @@ commit-patch (2.6.2-1) unstable; urgency=medium
 
   * Use secure copyright file specification URI.
 
- -- David Caldwell <david@porkrind.org>  Mon, 06 Sep 2021 12:37:46 -0700
+  * Remove obsolete lintian override.
+
+  * Use dh_elpa for elisp portion.
+
+ -- David Caldwell <david@porkrind.org>  Mon, 06 Sep 2021 14:27:23 -0700
 
 commit-patch (2.6-2) unstable; urgency=medium
 
