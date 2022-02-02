@@ -10,7 +10,7 @@ Vcs-Browser: https://github.com/caldwell/commit-patch/tree/debian
 
 Package: commit-patch
 Architecture: all
-Depends: ${misc:Depends}, ${perl:Depends}, libipc-run-perl, patch, patchutils, emacsen-common (>= 2.0.8)
+Depends: ${misc:Depends}, ${perl:Depends}, libipc-run-perl, patch, patchutils, emacsen-common
 Suggests: darcs | git | mercurial | bzr | monotone | subversion | cvs
 Description: utility to commit fine grained patches to source code control repositories
  Normally version control systems don't allow fine grained
