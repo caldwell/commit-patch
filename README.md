@@ -56,6 +56,25 @@ On Mac OS X w/ [Homebrew](https://brew.sh)
 
     brew install patchutils
 
+---
+**NOTE**
+
+If you see error like this: `you may need to install the IPC::Run
+module`, which means you are installing from source using `sudo make
+install` after cloning this repo. Here is how to install the needed
+perl module:
+
+    sudo perl -MCPAN -e shell
+    o conf init # on the prompt like perl> o conf init
+    ## exit from the prompt by typing `quit`
+    sudo perl -MCPAN -e 'install Bundle::CPAN' # to update CPAN
+    sudo perl -MCPAN -e 'install IPC::Run' # to install the module
+
+FYI: You do not need to install above module if you are using the
+`tar` version that comes with it.
+
+---
+
 
 Instructions
 ------------
