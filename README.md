@@ -7,87 +7,21 @@ Commit patches to Darcs, Git, Mercurial, Bazaar, Monotone, Subversion, or CVS
 Installation
 ------------
 
-On a recent Debian/Ubuntu:
+Depends on: 
 
-    apt install commit-patch
+- [patchutils] (https://github.com/twaugh/patchutils)
+  -- Install from your OS pkg manager
+- [IPC-Run] (https://github.com/toddr/IPC-Run)
+  -- Run following script:
 
-Anywhere else: Install the prerequisites below and download the release
-tarball from the [homepage](https://porkrind.org/commit-patch/). This
-tarball contains a "fatpacked" version of the `commit-patch` perl script
-with the external perl dependencies embedded. Then put the commit-patch
-and commit-partial binaries into your `PATH`.
+```
+git clone https://github.com/toddr/IPC-Run ~/repos/IPC-Run
+git clone https://github.com/oneness/commit-patch ~/repos/commit-patch
+cd ~/repos/commit-patch && sudo make install
+```
 
-
-Prerequisites
--------------
-
-`commit-patch` is known to run on Linux and Mac OS X. It is perl,
-so ideally it will run anywhere, but we have never tested in
-other environments, most notably Windows. Use at your own risk.
-
-`commit-patch` relies on several programs to get the job done:
-
-- [perl](https://www.perl.org)
-- [patch](https://www.gnu.org/software/patch/)
-- [interdiff](http://cyberelk.net/tim/software/patchutils/)
-- cp - Ideally installed on your system already. :-)
-
-and, of course, one of:
-
-- [git](https://git-scm.com/)
-- [mercurial](https://subversion.apache.org/)
-- [darcs](http://darcs.net/)
-- [subversion](http://subversion.tigris.org/)
-- [cvs](https://www.nongnu.org/cvs/)
-- [bazaar](https://bazaar.canonical.com/)
-- [monotone](https://www.monotone.ca/)
-
-## Installing Prerequisites
-
-On Debian/Ubuntu:
-
-    apt-get install patch patchutils
-
-On Fedora:
-
-    yum install patch patchutils
-
-On Mac OS X w/ [Homebrew](https://brew.sh)
-
-    brew install patchutils
-
----
-**NOTE**
-
-If you see error like this: `you may need to install the IPC::Run
-module`, which means you are installing from source using `sudo make
-install` after cloning this repo. Here is how to install the needed
-perl module:
-
-    sudo perl -MCPAN -e shell
-    o conf init # on the prompt like perl> o conf init
-    ## exit from the prompt by typing `quit`
-    sudo perl -MCPAN -e 'install Bundle::CPAN' # to update CPAN
-    sudo perl -MCPAN -e 'install IPC::Run' # to install the module
-
-FYI: You do not need to install above module if you are using the
-`tar` version that comes with it.
-
----
-
-
-Instructions
+Usage
 ------------
-
-### commit-patch
-
-See the man page or perldoc:
-
-    man ./commit-patch.1
-    perldoc commit-patch
-
-
-### commit-patch-buffer.el
 
 commit-patch-buffer.el is an emacs interface to `commit-patch`. It
 allows you to just hit `C-c C-c` in any patch buffer to apply and commit
@@ -102,30 +36,18 @@ your emacs init file:
 
 The easy way of working with commit-patch-buffer is to `M-x vc-diff` a
 file (or `M-x vc-root-diff` your whole project) then kill, split or edit
-the resulting hunks using diff mode's built-in commands and to then hit
-`C-c C-c` to commit the patch.
+the resulting hunks using diff mode's built-in commands and then hit
+`C-c C-c` to commit the patch. You can amend previous commit by `C-c C-C` instead.
 
 
-Development
+Notes
 -----------
 
-`commit-patch` uses [Carton](https://github.com/perl-carton/carton) for
-local development. Once Carton is installed:
+This is my fork of:
+- [commit-patch] (https://github.com/caldwell/commit-patch)
 
-    carton install
-
-After than `commit-patch` and `commit-partial` should work. There is no
-need to `carton exec` them—the code autodetects the local libs.
-
-
-Homepage
---------
-https://porkrind.org/commit-patch/
-
-Authors
--------
-- David Caldwell <david@porkrind.org>
-- Jim Radford <radford@blackbean.org>
+I will keep updating this fork to meet my use case. Please fork this
+or the original above to change/extend it if your needs are not met.
 
 Copyright and License
 ---------------------

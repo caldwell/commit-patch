@@ -9,7 +9,7 @@ my $FALLBACK_EDITOR = 'vi';
 use strict;
 use Cwd qw(abs_path);
 use File::Basename;
-use lib dirname(abs_path($0))."/local/lib/perl5";
+use lib $ENV{HOME}."/repos/IPC-Run/lib";
 use IPC::Run;
 use File::Temp qw(tempfile);
 use Getopt::Long;
